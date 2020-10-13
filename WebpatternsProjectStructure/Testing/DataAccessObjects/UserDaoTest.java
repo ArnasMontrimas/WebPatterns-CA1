@@ -1,4 +1,4 @@
-package DataAccessObjectsTests;
+package DataAccessObjects;
 
 import DataTransferObjects.*;
 import DataAccessObjects.*;

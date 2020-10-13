@@ -21,8 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `dundalk_library`
 --
-CREATE DATABASE IF NOT EXISTS `dundalk_library` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `dundalk_library`;
+CREATE DATABASE IF NOT EXISTS `dundalk_library_test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `dundalk_library_test`;
 
 -- --------------------------------------------------------
 
