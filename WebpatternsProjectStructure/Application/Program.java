@@ -13,7 +13,7 @@ import DataTransferObjects.User;
 
 public class Program {
 
-    private static final String DATABASE = "dundalk_library";
+    public static final String DATABASE = "dundalk_library";
 
     private static String getCommand(Scanner userInput) {
         System.out.println("-------------------------------------\n" +
@@ -100,9 +100,23 @@ public class Program {
                     System.out.println("Your account has been registered !");
                     break;
 
+                case "2":
+                    System.out.println("Please type in your username.");
+                    userName = validateString(userInput);
+                    System.out.println("Please type in your password.");
+                    passWord = validateString(userInput);
+                    userID = userDao.validateLogin(userName,passWord);
+                    if (userID == 0){
+                        System.out.println("The username or password is incorrect please try again");
+                    } else {
+                        System.out.println("Welcome" + " name of user here " + userID);
+
+                    }
+                    break;
+
                 default:
                     System.out.println("Please pick a number between 1-10."); // internaliozed
-                   // validCommand = false;
+
             }
 
         }

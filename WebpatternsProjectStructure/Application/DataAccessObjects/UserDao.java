@@ -5,9 +5,10 @@ import DataAccessObjects.Interfaces.UserDaoInterface;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ * @author Sam Ponik
+ */
 public class UserDao extends Dao implements UserDaoInterface {
 
     /**
@@ -22,7 +23,7 @@ public class UserDao extends Dao implements UserDaoInterface {
     /**
      * Returns true if the username is valid (if the username does not exist in the database)
      * @return boolean true/false
-     * @param username The username
+     * @param username The username to validate
      */
     @Override
     public boolean validateUsername(String username) {
@@ -78,7 +79,7 @@ public class UserDao extends Dao implements UserDaoInterface {
     /**
      * Returns true if the email is valid false otherwise if a email like that exists in the database already
      * @return boolean true/false
-     * @param email The email
+     * @param email The email to validate
      */
     @Override
     public boolean validateEmail(String email) {
@@ -133,7 +134,7 @@ public class UserDao extends Dao implements UserDaoInterface {
     /**
      * Returns true if the phone number is valid false otherwise if a phone number like that exists in the database already
      * @return boolean true/false
-     * @param phonenumber The phone number
+     * @param phonenumber The phone number to validate
      */
     @Override
     public boolean validatePhonenumber(String phonenumber) {
@@ -186,7 +187,7 @@ public class UserDao extends Dao implements UserDaoInterface {
     }
 
     /**
-     * Returns true if the phone number is valid false otherwise if a phone number like that exists in the database already
+     * Returns true if the member was inserted into the database.(Registered)
      * @return boolean true/false
      * @param username The username for the account
      * @param email The email for the account
@@ -224,6 +225,59 @@ public class UserDao extends Dao implements UserDaoInterface {
         }
         return rowsAffected != 0;
       }
+
+    /**
+     * @return Returns the unique ID of the user if password/username match else return 0
+     * @param username The username for login.
+     * @param password The password for login.
+     */
+    @Override
+    public int validateLogin(String username, String password) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int ID = 0;
+
+        try{
+            con = getConnection();
+            String query = "SELECT id FROM users WHERE username = ? AND password = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1,username);
+            ps.setString(2,password);
+            rs = ps.executeQuery();
+
+            if (rs.next()){
+                ID = rs.getInt("id");
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("An exception occurred while querying "
+                    + "the users table in the validatePhonenumber() method\n"
+                    + ex.getMessage());
+        }
+        finally{
+            if(rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing result set" );
+                    ex.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing prepared statement" );
+                    ex.printStackTrace();
+                }
+            }
+            if(con != null){
+                freeConnection(con);
+            }
+        }
+        return ID;
     }
+}
 
 

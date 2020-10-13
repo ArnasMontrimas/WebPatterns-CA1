@@ -6,11 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
-class ProgramTest {
-
-    @Test
-    void main() {
-    }
+class BookDaoTest {
 
     /**
      * Method to test all methods associated to Books
