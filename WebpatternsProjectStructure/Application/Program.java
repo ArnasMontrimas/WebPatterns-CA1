@@ -8,8 +8,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import DataAccessObjects.*;
+import DataTransferObjects.User;
 
 public class Program {
+
+    private static final String DATABASE = "dundalk_library";
 
     private static String getCommand(Scanner userInput) {
         System.out.println("-------------------------------------\n" +
@@ -50,6 +54,7 @@ public class Program {
 
     public static void main(String[] args) {
 
+        UserDao userDao = new UserDao(DATABASE);
         Scanner userInput = new Scanner(System.in);
         boolean librarySystemOnline = true;
         //boolean validCommand = true;
@@ -57,10 +62,10 @@ public class Program {
         System.out.println("***** Welcome to the Dundalk Library service ! *****");
 
         int userID = 0;
-        String userName = null;
-        String passWord = null;
-        String email = null;
-        String phoneNumber = null;
+        String userName;
+        String passWord;
+        String email;
+        String phoneNumber;
 
         while (librarySystemOnline){
             String command = getCommand(userInput);
@@ -69,12 +74,30 @@ public class Program {
                 case "1":
                     System.out.println("Please type in your username.");
                     userName = validateString(userInput);
+                    while (!userDao.validateUsername(userName)){
+                        System.out.println("That username exists try again.");
+                        userName = validateString(userInput);
+                    }
+
                     System.out.println("Please type in your password.");
                     passWord = validateString(userInput);
+
                     System.out.println("Please type in your email address.");
                     email = validateString(userInput);
+                    while (!userDao.validateEmail(email)){
+                        System.out.println("That email exists try again.");
+                        email = validateString(userInput);
+                    }
+
                     System.out.println("Please type in your phone number.");
                     phoneNumber = validateString(userInput);
+                    while (!userDao.validatePhonenumber(phoneNumber)){
+                        System.out.println("That phone number already exists try again.");
+                        phoneNumber = validateString(userInput);
+                    }
+                    // Finally after all validation insert a member into the table.
+                    userDao.registerUser(userName,passWord,email,phoneNumber);
+                    System.out.println("Your account has been registered !");
                     break;
 
                 default:
