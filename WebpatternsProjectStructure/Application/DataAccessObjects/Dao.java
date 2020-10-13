@@ -4,6 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * @author grallm
+ * @author Sam2288
+ * @author ArnasMontrimas
+ *
+ * Principal DAO connecting to the MySQL DB with JDBC
+ */
 public class Dao 
 {
     private final String databaseName;
@@ -15,7 +22,7 @@ public class Dao
     
     public Connection getConnection()
     {
-        String driver = "com.mysql.jdbc.Driver";
+        String driver = "com.mysql.cj.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/" + databaseName;
         String username = "root";
         String password = "";

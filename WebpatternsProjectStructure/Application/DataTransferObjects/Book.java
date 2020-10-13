@@ -16,10 +16,9 @@ public class Book {
     private String author;
     private String publisher;
     private int quantityInStock;
-    private String[] book_theme;
 
     //Constructor
-    public Book(int book_id, String book_name, String book_isbn, String book_edition, String book_description, String author, String publisher, int quantityInStock, String[] book_theme) {
+    public Book(int book_id, String book_name, String book_isbn, String book_edition, String book_description, String author, String publisher, int quantityInStock) {
         this.book_id = book_id;
         this.book_name = book_name;
         this.book_isbn = book_isbn;
@@ -28,7 +27,6 @@ public class Book {
         this.author = author;
         this.publisher = publisher;
         this.quantityInStock = quantityInStock;
-        this.book_theme = book_theme;
     }
 
     //Rest is boilerplate
@@ -96,14 +94,6 @@ public class Book {
         this.quantityInStock = quantityInStock;
     }
 
-    public String[] getBook_theme() {
-        return book_theme;
-    }
-
-    public void setBook_theme(String[] book_theme) {
-        this.book_theme = book_theme;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -129,7 +119,6 @@ public class Book {
                 ", author='" + author + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", quantityInStock=" + quantityInStock +
-                ", book_theme=" + Arrays.toString(book_theme) +
                 '}';
     }
 }
