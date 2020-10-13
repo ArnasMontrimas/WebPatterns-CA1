@@ -38,21 +38,20 @@ CREATE TABLE `book` (
   `book_description` varchar(200) NOT NULL,
   `author` varchar(35) NOT NULL,
   `publisher` varchar(35) NOT NULL,
-  `quantityInStock` int(80) NOT NULL,
-  `book_theme` enum('Fantasy','Computing','Biology') NOT NULL
+  `quantityInStock` int(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `book`
 --
 
-INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`, `book_theme`) VALUES
-(1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 60, 'Computing'),
-(2, 'Computing Intro 2', '978-1-60309-025-5', '2.1', 'Introduction to Computing Book 2', 'William Shakespeare', 'Penguin Random House', 50, 'Computing'),
-(3, 'Biology Intro', '678-1-60309-025-4', '3.1', 'Biology Intro', 'Emily Dickinson', 'HarperCollins', 57, 'Biology'),
-(4, 'Biology Intro 2', '778-1-60309-025-4', '4.1', 'Biology Intro 2', 'Emily Dickinson', 'HarperCollins', 47, 'Biology'),
-(5, 'Harry Potter', '978-1-60309-029-4', '7.1', 'Fantasy Wizard Book', 'H. P. Lovecraft', 'Macmillan Publishers', 12, 'Fantasy'),
-(6, 'Harry Potter 2', '978-1-60309-089-4', '5.8', 'Fantasy Wizard Book Epic', 'H. P. Lovecraft', 'Macmillan Publishers', 0, 'Fantasy');
+INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`) VALUES
+(1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 60),
+(2, 'Computing Intro 2', '978-1-60309-025-5', '2.1', 'Introduction to Computing Book 2', 'William Shakespeare', 'Penguin Random House', 50),
+(3, 'Biology Intro', '678-1-60309-025-4', '3.1', 'Biology Intro', 'Emily Dickinson', 'HarperCollins', 57),
+(4, 'Biology Intro 2', '778-1-60309-025-4', '4.1', 'Biology Intro 2', 'Emily Dickinson', 'HarperCollins', 47),
+(5, 'Harry Potter', '978-1-60309-029-4', '7.1', 'Fantasy Wizard Book', 'H. P. Lovecraft', 'Macmillan Publishers', 12),
+(6, 'Harry Potter 2', '978-1-60309-089-4', '5.8', 'Fantasy Wizard Book Epic', 'H. P. Lovecraft', 'Macmillan Publishers', 0);
 
 -- --------------------------------------------------------
 
