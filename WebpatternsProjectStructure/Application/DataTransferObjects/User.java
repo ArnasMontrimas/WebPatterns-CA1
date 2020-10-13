@@ -15,10 +15,10 @@ public class User {
     private String dateOfBirth;
     private int phoneNumber;
     private String dateRegistered;
-    private int activeAccount;
+    private boolean activeAccount;
 
     //Constructor
-    public User(int id, String type, String username, String password, String email, String dateOfBirth, int phoneNumber, String dateRegistered, int activeAccount) {
+    public User(int id, String type, String username, String password, String email, String dateOfBirth, int phoneNumber, String dateRegistered, boolean activeAccount) {
         this.id = id;
         this.type = type;
         this.username = username;
@@ -95,11 +95,11 @@ public class User {
         this.dateRegistered = dateRegistered;
     }
 
-    public int getActiveAccount() {
+    public boolean isActiveAccount() {
         return activeAccount;
     }
 
-    public void setActiveAccount(int activeAccount) {
+    public void setActiveAccount(boolean activeAccount) {
         this.activeAccount = activeAccount;
     }
 
