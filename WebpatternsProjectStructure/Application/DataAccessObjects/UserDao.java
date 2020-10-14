@@ -227,7 +227,7 @@ public class UserDao extends Dao implements UserDaoInterface {
       }
 
     /**
-     * @return Returns the unique ID of the user if password/username match else return 0
+     * @return Returns the unique ID of the user if password/username match else return 0 if the account is disabled by admin return -1
      * @param username The username for login.
      * @param password The password for login.
      */
@@ -240,19 +240,24 @@ public class UserDao extends Dao implements UserDaoInterface {
 
         try{
             con = getConnection();
-            String query = "SELECT id FROM users WHERE username = ? AND password = ?";
+            String query = "SELECT id,activeAccount FROM users WHERE username = ? AND password = ?";
             ps = con.prepareStatement(query);
             ps.setString(1,username);
             ps.setString(2,password);
             rs = ps.executeQuery();
 
             if (rs.next()){
-                ID = rs.getInt("id");
+                boolean validAccount = rs.getBoolean("activeAccount");
+                if (validAccount){
+                    ID = rs.getInt("id");
+                } else {
+                    ID = -1;
+                }
             }
         }
         catch(SQLException ex){
             System.out.println("An exception occurred while querying "
-                    + "the users table in the validatePhonenumber() method\n"
+                    + "the users table in the validateLogin() method\n"
                     + ex.getMessage());
         }
         finally{
