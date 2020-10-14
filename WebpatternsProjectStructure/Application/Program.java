@@ -5,10 +5,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import DataAccessObjects.*;
+import DataTransferObjects.Book;
 import DataTransferObjects.User;
 
 public class Program {
@@ -31,14 +33,20 @@ public class Program {
         return userInput.nextLine();
     }
 
+<<<<<<< HEAD
     //*********************-Why is this here?-******************************************
     private static void filmInfo(String[] components) {
+=======
+    private static void displayBook(Book b) {
+>>>>>>> 6708fcac8cd6d704fc587206b33237d9a2ef3176
 
         System.out.println("--------------------------------------------------\n" +
-                "|Film Name: " +components[0] + "\n" +
-                "|Genre: "  + components[1] + "\n" +
-                "|Total Ratings: "  + components[2] + "\n"  +
-                "|Number of people that rated this film: " + components[3] + "\n" +
+                "|Book Title: " + b.getBook_name() + "\n" +
+                "|ISBN: "  + b.getBook_isbn() + "\n" +
+                "|Edition: "  + b.getBook_edition() + "\n"  +
+                "|Description " + b.getBook_description() + "\n" +
+                "|Author " + b.getAuthor() + "\n" +
+                "|Publisher " + b.getPublisher() + "\n" +
                 "--------------------------------------------------"
         );
     }
@@ -57,6 +65,7 @@ public class Program {
     public static void main(String[] args) {
 
         UserDao userDao = new UserDao(DATABASE);
+        BookDao bookDao = new BookDao(DATABASE);
         Scanner userInput = new Scanner(System.in);
         boolean librarySystemOnline = true;
         //boolean validCommand = true;
@@ -110,9 +119,17 @@ public class Program {
                     userID = userDao.validateLogin(userName,passWord);
                     if (userID == 0){
                         System.out.println("The username or password is incorrect please try again");
+                    } else if (userID == -1){
+                        System.out.println("The account has been disabled please create a new account");
                     } else {
                         System.out.println("Welcome" + " name of user here " + userName);
 
+                    }
+                    break;
+
+                case "3":
+                    for(Book b: bookDao.getAllBooks()) {
+                       displayBook(b);
                     }
                     break;
 
