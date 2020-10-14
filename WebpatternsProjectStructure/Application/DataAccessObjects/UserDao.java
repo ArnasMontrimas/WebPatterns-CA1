@@ -1,6 +1,7 @@
 package DataAccessObjects;
 
 import DataAccessObjects.Interfaces.UserDaoInterface;
+import DataTransferObjects.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -277,6 +278,68 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         return ID;
+    }
+
+    /**
+     * This method queries the db for all users
+     * @return all users from database
+     * @author Arnas
+     */
+    @Override
+    public ArrayList<User> getAllUsers() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        ArrayList<User> users = new ArrayList<>();
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement("SELECT * FROM users");
+            rs = ps.executeQuery();
+
+            if(rs.isBeforeFirst()) {
+                while(rs.next()) {
+                    users.add(new User(
+                            rs.getInt("id"),
+                            rs.getString("type"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getString("phoneNumber"),
+                            rs.getString("dateRegistered"),
+                            rs.getBoolean("activeAccount")
+                    ));
+                }
+            } else {
+                System.out.println("Nothing Found");
+                users = null;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Exception Occurred: " + e.getMessage());
+        } finally {
+            if(rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing result set" );
+                    ex.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing prepared statement" );
+                    ex.printStackTrace();
+                }
+            }
+            if(con != null){
+                freeConnection(con);
+            }
+        }
+        return users;
     }
 }
 

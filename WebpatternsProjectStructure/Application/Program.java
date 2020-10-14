@@ -31,6 +31,7 @@ public class Program {
         return userInput.nextLine();
     }
 
+    //*********************-Why is this here?-******************************************
     private static void filmInfo(String[] components) {
 
         System.out.println("--------------------------------------------------\n" +
@@ -41,6 +42,7 @@ public class Program {
                 "--------------------------------------------------"
         );
     }
+    //*********************-^^^^^^^^^^^^^^^^^^^^^-******************************************
 
     private static String validateString(Scanner userInput) {
         String var;
@@ -109,7 +111,7 @@ public class Program {
                     if (userID == 0){
                         System.out.println("The username or password is incorrect please try again");
                     } else {
-                        System.out.println("Welcome" + " name of user here " + userID);
+                        System.out.println("Welcome" + " name of user here " + userName);
 
                     }
                     break;

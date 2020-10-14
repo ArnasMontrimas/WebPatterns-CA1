@@ -90,7 +90,7 @@ public class Loan {
 
     @Override
     public String toString() {
-        return "Loan{" +
+        return "\nLoan{" +
                 "loan_id=" + loan_id +
                 ", user_id=" + user_id +
                 ", book_id=" + book_id +

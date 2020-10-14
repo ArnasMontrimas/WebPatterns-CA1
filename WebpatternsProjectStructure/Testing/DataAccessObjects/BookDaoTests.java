@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BookDaoTests {
-    private final BookDao bookDao = new BookDao("dundalk_library");
+    private final BookDao bookDao = new BookDao("dundalk_library_test");
 
     /**
      * Testing fetching a Book from its ID and check if objects are equal
