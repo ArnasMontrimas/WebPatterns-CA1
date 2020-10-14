@@ -39,7 +39,6 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         ResultSet rs = null;
 
         ArrayList<Loan> loans = new ArrayList<>();
-        User user;
         Book book;
 
         try {
@@ -51,12 +50,11 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             rs = ps.executeQuery();
 
             while(rs.next()) {
-                user = getUserById(rs, con);
                 book = getBookById(rs, con);
 
                 loans.add(new Loan(
                    rs.getInt("loan_id"),
-                   user,
+                   user1,
                    book,
                    rs.getString("loan_started"),
                    rs.getString("loan_ends"),
@@ -88,25 +86,23 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         ResultSet rs = null;
 
         ArrayList<Loan> loans = new ArrayList<>();
-        User user;
         Book book;
 
         try {
             con = getConnection();
 
-            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_user_id = ? AND loan_started <= ?");
+            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_user_id = ? AND loan_started >= ?");
             ps.setInt(1, id);
             ps.setString(2, date);
 
             rs = ps.executeQuery();
 
             while(rs.next()) {
-                user = getUserById(rs, con);
                 book = getBookById(rs, con);
 
                 loans.add(new Loan(
                         rs.getInt("loan_id"),
-                        user,
+                        user1,
                         book,
                         rs.getString("loan_started"),
                         rs.getString("loan_ends"),

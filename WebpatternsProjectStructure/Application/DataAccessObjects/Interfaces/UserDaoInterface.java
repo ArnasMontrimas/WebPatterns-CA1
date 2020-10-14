@@ -1,5 +1,9 @@
 package DataAccessObjects.Interfaces;
 
+import DataTransferObjects.User;
+
+import java.util.ArrayList;
+
 public interface UserDaoInterface {
 
     /**
@@ -15,5 +19,10 @@ public interface UserDaoInterface {
      */
     int validateLogin(String username,String password);
 
+    /**
+     * Get all users from database
+     * @return ArrayList of users
+     */
+    ArrayList<User> getAllUsers();
 
 }
