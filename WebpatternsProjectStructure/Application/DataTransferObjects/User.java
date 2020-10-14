@@ -12,19 +12,17 @@ public class User {
     private String username;
     private String password; //Should The password be Hashed? or nah...
     private String email;
-    private String dateOfBirth;
-    private int phoneNumber;
+    private String phoneNumber;
     private String dateRegistered;
     private boolean activeAccount;
 
     //Constructor
-    public User(int id, String type, String username, String password, String email, String dateOfBirth, int phoneNumber, String dateRegistered, boolean activeAccount) {
+    public User(int id, String type, String username, String password, String email, String phoneNumber, String dateRegistered, boolean activeAccount) {
         this.id = id;
         this.type = type;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.dateRegistered = dateRegistered;
         this.activeAccount = activeAccount;
@@ -71,19 +69,11 @@ public class User {
         this.email = email;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -109,7 +99,7 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id == user.id &&
-                phoneNumber == user.phoneNumber &&
+                phoneNumber.equals(user.phoneNumber) &&
                 Objects.equals(username, user.username) &&
                 Objects.equals(email, user.email);
     }
@@ -121,13 +111,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "\nUser{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", phoneNumber=" + phoneNumber +
                 ", dateRegistered='" + dateRegistered + '\'' +
                 ", activeAccount=" + activeAccount +
