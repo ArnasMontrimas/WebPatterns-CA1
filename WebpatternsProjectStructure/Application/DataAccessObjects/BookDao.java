@@ -72,10 +72,10 @@ public class BookDao extends Dao implements BookDaoInterface {
         try {
             con = getConnection();
 
-            ps = con.prepareStatement("INSERT INTO 'book'" +
-                    "('book_id', 'book_name', 'book_isbn', 'book_edition', 'book_description', 'author', 'publisher', 'quantityInStock')" +
+            ps = con.prepareStatement("INSERT INTO `book`" +
+                    "(`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-            System.out.println(book);
+
             ps.setInt(1, book.getBook_id());
             ps.setString(2, book.getBook_name());
             ps.setString(3, book.getBook_isbn());
@@ -86,7 +86,6 @@ public class BookDao extends Dao implements BookDaoInterface {
             ps.setInt(8, book.getQuantityInStock());
 
             rowsAffected = ps.executeUpdate();
-            System.out.println(ps.getMetaData());
         } catch (SQLException e) {
             System.out.println("Exception BookDao.addBook(): " + e.getMessage());
         } catch( Exception e ) {
