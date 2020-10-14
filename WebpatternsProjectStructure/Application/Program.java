@@ -42,6 +42,7 @@ public class Program {
                 "|Description " + b.getBook_description() + "\n" +
                 "|Author " + b.getAuthor() + "\n" +
                 "|Publisher " + b.getPublisher() + "\n" +
+                "|Available: " + (b.getQuantityInStock() > 0 ? "Yes" : "No") + "\n" +
                 "--------------------------------------------------"
         );
     }

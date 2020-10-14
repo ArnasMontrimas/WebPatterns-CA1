@@ -158,9 +158,7 @@ public class BookDao extends Dao implements BookDaoInterface {
             }
         }
 
-        if (rowsAffected == -1 ) {
-            System.out.println("Book with this ID already exists");
-        } else if (rowsAffected != 1) {
+        if (rowsAffected != 1) {
             System.out.println("Book couldn't be removed");
         }
         return rowsAffected == 1;
@@ -218,5 +216,103 @@ public class BookDao extends Dao implements BookDaoInterface {
         } catch (SQLException e) {
             System.out.println("Exception BookDao.findById(): " + e.getMessage());
         }
+    }
+
+    /**
+     * Add some stocks to a Book (new copies or copies given back)
+     *
+     * @param book_id  The book to add stocks
+     * @param quantity Number of copies to add
+     * @return true if edition succeeded, false instead
+     */
+    public boolean addCopies(int book_id, int quantity) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
+
+        if (quantity < 0) {
+            System.out.println("BookDao.addCopies(): can't add <0 copies");
+            return false;
+        }
+
+        try {
+            con = getConnection();
+
+            ps = con.prepareStatement("UPDATE `book` SET `quantityInStock` = `quantityInStock` + ? WHERE `book_id` = ?;");
+            ps.setInt(1, quantity);
+            ps.setInt(2, book_id);
+
+            rowsAffected = ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Exception BookDao.addCopies(): " + e.getMessage());
+        } catch( Exception e ) {
+            System.out.println("Exception BookDao.addCopies(): " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    freeConnection(con);
+                }
+            } catch (SQLException e) {
+                System.out.println("Exception BookDao.addCopies(): " + e.getMessage());
+            }
+        }
+
+        if (rowsAffected != 1) {
+            System.out.println("Copies couldn't be added");
+        }
+        return rowsAffected == 1;
+    }
+
+    /**
+     * Remove some stocks to a Book (removing copies or loaning copies)
+     *
+     * @param book_id  The book to remove stocks
+     * @param quantity Number of copies to remove
+     * @return true if edition succeeded, false instead
+     */
+    public boolean removeCopies(int book_id, int quantity) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
+
+        if (quantity < 0) {
+            System.out.println("BookDao.removeCopies(): can't remove <0 copies");
+            return false;
+        }
+
+        try {
+            con = getConnection();
+
+            ps = con.prepareStatement("UPDATE `book` SET `quantityInStock` = `quantityInStock` - ? WHERE `book_id` = ?;");
+            ps.setInt(1, quantity);
+            ps.setInt(2, book_id);
+
+            rowsAffected = ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Exception BookDao.removeCopies(): " + e.getMessage());
+        } catch( Exception e ) {
+            System.out.println("Exception BookDao.removeCopies(): " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    freeConnection(con);
+                }
+            } catch (SQLException e) {
+                System.out.println("Exception BookDao.removeCopies(): " + e.getMessage());
+            }
+        }
+
+        if (rowsAffected != 1) {
+            System.out.println("Copies couldn't be removed");
+        }
+        return rowsAffected == 1;
     }
 }

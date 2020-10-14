@@ -38,9 +38,20 @@ public interface BookDaoInterface {
     boolean removeBook(int book_id);
 
     /**
-     * Fetch all books
+     * Add some stocks to a Book (new copies or copies given back)
      *
-     * @return All Books in library
+     * @param book_id The book to add stocks
+     * @param quantity Number of copies to add
+     * @return true if edition succeeded, false instead
      */
-    ArrayList<Book> getAllBooks();
+    boolean addCopies(int book_id, int quantity);
+
+    /**
+     * Remove some stocks to a Book (removing copies or loaning copies)
+     *
+     * @param book_id The book to remove stocks
+     * @param quantity Number of copies to remove
+     * @return true if edition succeeded, false instead
+     */
+    boolean removeCopies(int book_id, int quantity);
 }
