@@ -25,4 +25,8 @@ public interface UserDaoInterface {
      */
     ArrayList<User> getAllUsers();
 
+    /**
+     * Returns the User object by the unique id
+     */
+    User getUserByID(int userID);
 }

@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
  */
 class UserDaoTest {
 
-    UserDao userDao = new UserDao("dundalk_library");
     UserDao userDaoTest = new UserDao("dundalk_library_test");
 
     /**
@@ -22,7 +21,7 @@ class UserDaoTest {
 
         // Testing for a username which is created and in the database
         // This should return false becasue that username is already created and in use.
-        boolean nameExists = userDao.validateUsername("Sam");
+        boolean nameExists = userDaoTest.validateUsername("Sam");
 
         assertFalse(nameExists);
     }
@@ -32,7 +31,7 @@ class UserDaoTest {
 
         // Testing for a username which is available
         // This should return true becasue that username is available
-        boolean nameExists = userDao.validateUsername("TEST_USER_NAME");
+        boolean nameExists = userDaoTest.validateUsername("TEST_USER_NAME");
 
         assertTrue(nameExists);
     }
@@ -42,7 +41,7 @@ class UserDaoTest {
 
         // Testing for a email which is created and in the database
         // This should return false becasue the email is already created and in use.
-        boolean emailExists = userDao.validateEmail("sam@gmail.com");
+        boolean emailExists = userDaoTest.validateEmail("sam@gmail.com");
 
         assertFalse(emailExists);
     }
@@ -52,7 +51,7 @@ class UserDaoTest {
 
         // Testing for a email which is available
         // This should return true becasue the email is available
-        boolean emailExists = userDao.validateUsername("TEST_EMAIL@gmail.com");
+        boolean emailExists = userDaoTest.validateUsername("TEST_EMAIL@gmail.com");
 
         assertTrue(emailExists);
     }
@@ -62,7 +61,7 @@ class UserDaoTest {
 
         // Testing for phonenumber which is created and in the database
         // This should return false becasue the phonenumber is already created and in use.
-        boolean phoneExists = userDao.validatePhonenumber("0838568457");
+        boolean phoneExists = userDaoTest.validatePhonenumber("0838568457");
 
         assertFalse(phoneExists);
     }
@@ -72,7 +71,7 @@ class UserDaoTest {
 
         // Testing for a email which is available
         // This should return true becasue the phonenumber is available
-        boolean phoneExists = userDao.validatePhonenumber("9999999999");
+        boolean phoneExists = userDaoTest.validatePhonenumber("9999999999");
 
         assertTrue(phoneExists);
     }
@@ -93,7 +92,7 @@ class UserDaoTest {
         // Should return 1 which is Sam's unique ID
         int correctID = 1;
 
-        assertEquals(correctID,userDao.validateLogin("Sam","sam1"));
+        assertEquals(correctID,userDaoTest.validateLogin("Sam","sam1"));
     }
 
     @Test
@@ -102,7 +101,16 @@ class UserDaoTest {
         // Should return 0 since that username and password dont match
         int response = 0;
 
-        assertEquals(response,userDao.validateLogin("Sam","TEST"));
+        assertEquals(response,userDaoTest.validateLogin("Sam","TEST"));
+    }
+
+    @Test
+    void validateUserObject() {
+
+        // Should return 0 since that username and password dont match
+        User user = new User(1,"Member","Sam","sam1","sam@gmail.com","0838568457","2020-10-12 17:13:03",true);
+        userDaoTest.getUserByID(1);
+        assertEquals(userDaoTest.getUserByID(1),user);
     }
 
 

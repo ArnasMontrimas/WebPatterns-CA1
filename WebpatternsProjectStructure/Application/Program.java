@@ -1,5 +1,3 @@
-
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -33,12 +31,7 @@ public class Program {
         return userInput.nextLine();
     }
 
-<<<<<<< HEAD
-    //*********************-Why is this here?-******************************************
-    private static void filmInfo(String[] components) {
-=======
     private static void displayBook(Book b) {
->>>>>>> 6708fcac8cd6d704fc587206b33237d9a2ef3176
 
         System.out.println("--------------------------------------------------\n" +
                 "|Book Title: " + b.getBook_name() + "\n" +
@@ -51,7 +44,6 @@ public class Program {
                 "--------------------------------------------------"
         );
     }
-    //*********************-^^^^^^^^^^^^^^^^^^^^^-******************************************
 
     private static String validateString(Scanner userInput) {
         String var;
@@ -123,14 +115,14 @@ public class Program {
                     } else if (userID == -1){
                         System.out.println("The account has been disabled please create a new account");
                     } else {
-                        System.out.println("Welcome" + " name of user here " + userName);
+                        System.out.println("Welcome" + " name of user here " + userID);
 
                     }
                     break;
 
                 case "3":
                     for(Book b: bookDao.getAllBooks()) {
-                       displayBook(b);
+                        displayBook(b);
                     }
                     break;
 
@@ -140,9 +132,5 @@ public class Program {
             }
 
         }
-
-
-
-
     }
 }

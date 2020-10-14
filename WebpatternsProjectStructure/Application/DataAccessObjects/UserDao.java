@@ -346,6 +346,65 @@ public class UserDao extends Dao implements UserDaoInterface {
         }
         return users;
     }
+
+    /**
+     * Gets the user object by the primary key which is the ID
+     * @return all users from database
+     */
+    @Override
+    public User getUserByID(int userID) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        User user = null;
+
+        try{
+            con = getConnection();
+            String query = "SELECT * FROM users WHERE id = ?";
+            ps = con.prepareStatement(query);
+            ps.setInt(1,userID);
+            rs = ps.executeQuery();
+
+            if (rs.next()){
+                user = new User(userID,
+                        rs.getString("type"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("dateRegistered"),
+                        rs.getBoolean("activeAccount")
+                        );
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("An exception occurred while querying "
+                    + "the users table in the validateLogin() method\n"
+                    + ex.getMessage());
+        }
+        finally{
+            if(rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing result set" );
+                    ex.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing prepared statement" );
+                    ex.printStackTrace();
+                }
+            }
+            if(con != null){
+                freeConnection(con);
+            }
+        }
+        return user;
+    }
 }
 
 

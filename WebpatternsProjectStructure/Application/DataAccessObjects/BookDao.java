@@ -40,14 +40,14 @@ public class BookDao extends Dao implements BookDaoInterface {
             if(rs.next())
             {
                 book = new Book(
-                    book_id,
-                    rs.getString("book_name"),
-                    rs.getString("book_isbn"),
-                    rs.getString("book_edition"),
-                    rs.getString("book_description"),
-                    rs.getString("author"),
-                    rs.getString("publisher"),
-                    rs.getInt("quantityInStock")
+                        book_id,
+                        rs.getString("book_name"),
+                        rs.getString("book_isbn"),
+                        rs.getString("book_edition"),
+                        rs.getString("book_description"),
+                        rs.getString("author"),
+                        rs.getString("publisher"),
+                        rs.getInt("quantityInStock")
                 );
             }
         }catch (SQLException e) {
@@ -72,15 +72,10 @@ public class BookDao extends Dao implements BookDaoInterface {
         try {
             con = getConnection();
 
-<<<<<<< HEAD
-            ps = con.prepareStatement("INSERT INTO book (book_id, book_name, book_isbn, book_edition, book_description, author, publisher, quantityInStock) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            System.out.println(book);
-=======
             ps = con.prepareStatement("INSERT INTO `book`" +
                     "(`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
 
->>>>>>> 6708fcac8cd6d704fc587206b33237d9a2ef3176
             ps.setInt(1, book.getBook_id());
             ps.setString(2, book.getBook_name());
             ps.setString(3, book.getBook_isbn());

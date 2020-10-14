@@ -11,12 +11,8 @@ import static org.junit.Assert.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookDaoTests {
-<<<<<<< HEAD
-    private final BookDao bookDao = new BookDao("dundalk_library_test");
-=======
     private final BookDao bookDao = new BookDao("dundalk_library");
     private final BookDao bookTestDao = new BookDao("dundalk_library_test");
->>>>>>> 6708fcac8cd6d704fc587206b33237d9a2ef3176
 
     /**
      * Testing fetching a Book from its ID and check if objects are equal
