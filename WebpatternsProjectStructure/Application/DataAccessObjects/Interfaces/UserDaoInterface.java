@@ -29,4 +29,9 @@ public interface UserDaoInterface {
      * Returns the User object by the unique id
      */
     User getUserByID(int userID);
+
+    /**
+     * Admin method to disable members accounts
+     */
+    int disableMembersAccount(String name);
 }

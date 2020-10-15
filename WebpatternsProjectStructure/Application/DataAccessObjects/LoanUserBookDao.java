@@ -71,17 +71,15 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
     }
 
     /**
-     *
-     * @param user1
-     * @return
+     * Gets all the loans
+     * @param user1 The user Object
+     * @return Arraylist of all the loans for the user since making an account
      */
     @Override
     public ArrayList<Loan> allLoansSinceJoining(User user1) {
         int id = user1.getId();
-        String date = user1.getDateRegistered();
 
         Connection con = null;
-
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -91,10 +89,8 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         try {
             con = getConnection();
 
-            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_user_id = ? AND loan_started >= ?");
+            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_user_id = ?");
             ps.setInt(1, id);
-            ps.setString(2, date);
-
             rs = ps.executeQuery();
 
             while(rs.next()) {

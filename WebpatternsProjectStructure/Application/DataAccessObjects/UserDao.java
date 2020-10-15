@@ -349,7 +349,8 @@ public class UserDao extends Dao implements UserDaoInterface {
 
     /**
      * Gets the user object by the primary key which is the ID
-     * @return all users from database
+     * @return the User object
+     * @param userID The id of the user
      */
     @Override
     public User getUserByID(int userID) {
@@ -404,6 +405,72 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         return user;
+    }
+
+    /**
+     * Admin method to disable a members account
+     * @return Returns 1 if successful 0 if username does not exist -1 if tried to disable a admins account
+     *  and -2 if the account was already disabled
+     * @param name The members username
+     */
+    @Override
+    public int disableMembersAccount(String name) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int result = 0;
+
+        try{
+            con = getConnection();
+            ps = con.prepareStatement("Select * from users where username = ?");
+            ps.setString(1,name);
+            rs = ps.executeQuery();
+
+            if (rs.next()){
+
+                if (rs.getString("type").equals("Admin")){
+                    result = -1;
+                } else {
+                    // The account is a member account and its not disabled
+                    if (rs.getBoolean("activeAccount")){
+                        ps = con.prepareStatement("UPDATE users SET activeAccount = 0 WHERE username = ?");
+                        ps.setString(1,name);
+                        ps.executeUpdate();
+                        result = 1;
+                    } else {
+                        // Account is already disabled
+                        result = -2;
+                    }
+                }
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("An exception occurred while querying "
+                    + "the users table in the validateLogin() method\n"
+                    + ex.getMessage());
+        }
+        finally{
+            if(rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing result set" );
+                    ex.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println("Exception when closing prepared statement" );
+                    ex.printStackTrace();
+                }
+            }
+            if(con != null){
+                freeConnection(con);
+            }
+        }
+        return result;
     }
 }
 
