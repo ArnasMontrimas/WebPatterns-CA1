@@ -14,9 +14,12 @@ import java.util.Date;
 
 /**
  * This class will interact with the Loan Table in db
- * @author Arnas
+ * @author Arnas M.
  */
 public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
+
+    private BookDao bookDao = new BookDao("dundalk_library");
+
     /**
      * Constructor opens a connection to the database
      * @param databaseName name of the database to be used
@@ -26,9 +29,9 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
     }
 
     /**
-     *
-     * @param user1
-     * @return
+     * This method gets all currently active loans for a particular user
+     * @param user1 the user object for which we want to get loans
+     * @return ArrayList of loan objects if none found empty ArrayList is returned
      */
     @Override
     public ArrayList<Loan> allLoansByUserId(User user1) {
@@ -49,16 +52,16 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
             rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 book = getBookById(rs, con);
 
                 loans.add(new Loan(
-                   rs.getInt("loan_id"),
-                   user1,
-                   book,
-                   rs.getString("loan_started"),
-                   rs.getString("loan_ends"),
-                   rs.getInt("loan_is_active")
+                        rs.getInt("loan_id"),
+                        user1,
+                        book,
+                        rs.getString("loan_started"),
+                        rs.getString("loan_ends"),
+                        rs.getInt("loan_is_active")
                 ));
             }
 
@@ -71,9 +74,9 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
     }
 
     /**
-     * Gets all the loans
-     * @param user1 The user Object
-     * @return Arraylist of all the loans for the user since making an account
+     * Gets all the loans since user joined library
+     * @param user1 the user object for which we want to get loans
+     * @return ArrayList of loan objects if none found empty ArrayList is returned
      */
     @Override
     public ArrayList<Loan> allLoansSinceJoining(User user1) {
@@ -93,7 +96,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             ps.setInt(1, id);
             rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 book = getBookById(rs, con);
 
                 loans.add(new Loan(
@@ -116,9 +119,11 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
 
     /**
-     *
-     * @param name
-     * @return
+     * This method loans a book to a particular user
+     * @param name The title of the book to be loaned
+     * @param loanDays How many days the user wants the loan to last
+     * @param user The user who is loaning a book
+     * @return This method returns a particular number for each error encountered "-2 = Book was attempted to be loaned for longer than 7 days", "-1 = The book was already loaned by the user", "0 = The book in question is out of stock", "2 = The quantity of the book could not be reduced after the loan succeeded", "1 = The loan was successful"
      */
     @Override
     public int loanBook(String name, int loanDays, User user) {
@@ -160,12 +165,12 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             ps.setString(4, endDate);
             ps.setInt(5, 1);
 
-            if(loanDays > 0 && loanDays <= 7) {
+            if (loanDays > 0 && loanDays <= 7) {
                 if (!checkIfBookAlreadyLoaned(book.getBook_id(), user.getId())) {
                     if (book.getQuantityInStock() > 0) {
                         rs = ps.executeUpdate();
                         if (rs > 0) {
-                            if (reduceOrAddBookQuantity(book.getBook_id(), -1)) result = 1; //Book has been loaned
+                            if (bookDao.removeCopies(book.getBook_id(), 1)) result = 1; //Book has been loaned
                             else result = 2; //Book quantity could not be reduced
                         } else System.err.println("Something went wrong book could not be loaned");
                     } else result = 0; //The book is out of stock
@@ -173,7 +178,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             } else result = -2; //Books cant be loaned for longer than 7 days
 
 
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             System.err.println("Exception Occurred: " + ex.getMessage());
             ex.printStackTrace();
         } finally {
@@ -183,9 +188,10 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * This method returns a book loaned by a particular user
+     * @param name The name of the book to be returned
+     * @param user The user who is returning the book
+     * @return True is returned if successful False if not
      */
     @Override
     public boolean returnBook(String name, User user) {
@@ -203,13 +209,13 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             book = getBookByName(name, con);
 
             //Make sure that the book is actually loaned before returning it
-            if(checkIfBookAlreadyLoaned(book.getBook_id(), user.getId())) {
+            if (checkIfBookAlreadyLoaned(book.getBook_id(), user.getId())) {
                 rs = ps.executeUpdate();
-                if(rs > 0) if (reduceOrAddBookQuantity(book.getBook_id(), +1)) result = true;
+                if (rs > 0) if (bookDao.addCopies(book.getBook_id(), 1)) result = true;
             }
 
 
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             System.err.println("Exception Occurred: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -217,7 +223,13 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         return result;
     }
 
-    //Some private methods to keep be more organized
+    /**
+     * This method queries the database and gets a book by its id
+     * @param rsLoan this is the ResultSet object from which we extract book_id from the loan table to be matched in book table
+     * @param con Connection object to connect to the database and run queries
+     * @return A book object if one is found if not found the object will be assigned a null value
+     * @throws SQLException if an an error occurs with query
+     */
     private Book getBookById(ResultSet rsLoan, Connection con) throws SQLException {
         PreparedStatement ps;
         ResultSet rs;
@@ -244,32 +256,14 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         closeRsPs(ps, rs);
         return book;
     }
-    private User getUserById(ResultSet rsLoan, Connection con) throws SQLException {
-        PreparedStatement ps;
-        ResultSet rs;
 
-        User user;
-
-        ps = con.prepareStatement("SELECT * FROM users WHERE id = ?");
-        ps.setInt(1, rsLoan.getInt("loan_user_id"));
-        rs = ps.executeQuery();
-
-        if (rs.isBeforeFirst()) {
-            rs.next();
-            user = new User(
-                    rs.getInt("id"),
-                    rs.getString("type"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("email"),
-                    rs.getString("phoneNumber"),
-                    rs.getString("dateRegistered"),
-                    rs.getBoolean("activeAccount")
-            );
-        } else user = null;
-        closeRsPs(ps, rs);
-        return user;
-    }
+    /**
+     * This method queries the database and gets a book by its name
+     * @param name the name with which we want to find a book from table
+     * @param con Connection object to connect to the database and run queries
+     * @return a book object if one is found if not found the object will be assigned a null value
+     * @throws SQLException if an error occurs with query
+     */
     private Book getBookByName(String name, Connection con) throws SQLException {
         PreparedStatement ps;
         ResultSet rs;
@@ -296,12 +290,25 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         closeRsPs(ps, rs);
         return book;
     }
+
+    /**
+     * This method closes an open connection to database
+     * @param con Connection object
+     * @param ps PreparedStatement object
+     * @param rs ResultSet object
+     */
     private void closeConnections(Connection con, PreparedStatement ps, ResultSet rs) {
         closeRsPs(ps, rs);
         if (con != null) {
             freeConnection(con);
         }
     }
+
+    /**
+     * This method is required for use cases when the connection variable is passed as a parameter and we dont want to close it inside the method
+     * @param ps PreparedStatement object
+     * @param rs ResultSet object
+     */
     private void closeRsPs(PreparedStatement ps, ResultSet rs) {
         if (rs != null) {
             try {
@@ -320,6 +327,13 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             }
         }
     }
+
+    /**
+     * This method checks if a book being loaned by a user is not already on loan by that user
+     * @param book_id the id of the book to be loaned
+     * @param user_id the id of the user who wants to loan the book
+     * @return True if the book is already on loan by that user False if the book is not on loan by that user
+     */
     private boolean checkIfBookAlreadyLoaned(int book_id, int user_id) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -336,7 +350,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
             loaned = rs.next();
 
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             System.err.println("Exception Occurred: " + ex.getMessage());
             ex.printStackTrace();
         } finally {
@@ -344,29 +358,5 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         }
 
         return loaned;
-    }
-    private boolean reduceOrAddBookQuantity(int book_id, int quantity) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        int rs;
-
-        boolean reduced = true;
-
-        try {
-            con = getConnection();
-            ps = con.prepareStatement("UPDATE book SET quantityInStock = (quantityInStock+?) WHERE book_id = ?");
-            ps.setInt(1, quantity);
-            ps.setInt(2, book_id);
-            rs = ps.executeUpdate();
-
-            reduced = rs > 0;
-
-        } catch(SQLException ex) {
-            System.err.println("Exception Occurred: " + ex.getMessage());
-            ex.printStackTrace();
-        } finally {
-            closeConnections(con, ps, null);
-        }
-        return reduced;
     }
 }
