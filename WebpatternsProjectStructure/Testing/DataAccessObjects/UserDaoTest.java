@@ -108,16 +108,28 @@ class UserDaoTest {
     void validateUserObjectTest() {
         // Should return true since the User by that ID 1 is the same as the user object
         User user = new User(1,"Member","Sam","sam1","sam@gmail.com","0838568457","2020-10-12 17:13:03",true);
-        userDaoTest.getUserByID(1);
         assertEquals(userDaoTest.getUserByID(1),user);
     }
 
     @Test
     void disableAdminAccountTest() {
-        // Should return -1 because u cant disable a admins accont
-        User user = new User(3,"Admin","AdminBob","adminpass","bob@gmail.com","0896542568","2020-10-12 17:16:04",true);
-        userDaoTest.disableMembersAccount("AdminBob");
+        // Should return -1 because u cant disable a admins account
+        assertEquals(-1,userDaoTest.disableMembersAccount("AdminBob"));
     }
+
+    @Test
+    void disableUserAccountTest() {
+        // Should return 0 because the user name does not exist
+        assertEquals(0,userDaoTest.disableMembersAccount("TEST_USER_NAME"));
+    }
+
+//    @Test
+//    void disableUserAccountTest2() {
+//        // Should return -2 becasue the account is already disabled
+//        assertEquals(-2,userDaoTest.disableMembersAccount("Sam1"));
+//    }
+
+
 
 
 }
