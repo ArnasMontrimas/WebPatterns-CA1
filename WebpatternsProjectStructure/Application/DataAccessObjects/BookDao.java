@@ -102,35 +102,42 @@ public class BookDao extends Dao implements BookDaoInterface {
     /**
      * Adding a Book to the DB
      *
-     * @param book Book to add
+     * @param book_name Book to add name
+     * @param book_isbn Book to add isbn
+     * @param book_edition Book to add edition
+     * @param book_description Book to add description
+     * @param author Book to add author
+     * @param publisher Book to add publisher
+     * @param quantityInStock Book to add quantityInStock
      * @return true if Book has been added, false if not
      */
-    public boolean addBook(Book book) {
+    public boolean addBook(String book_name, String book_isbn, String book_edition, String book_description, String author, String publisher, int quantityInStock) {
         Connection con = null;
         PreparedStatement ps = null;
         int rowsAffected = 0;
+
+        if (this.findByName(book_name) != null) {
+            System.out.println("Book with this Name already exists");
+            return false;
+        }
 
         try {
             con = getConnection();
 
             ps = con.prepareStatement("INSERT INTO `book`" +
-                    "(`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+                    "(`book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`)" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?);");
 
-            ps.setInt(1, book.getBook_id());
-            ps.setString(2, book.getBook_name());
-            ps.setString(3, book.getBook_isbn());
-            ps.setString(4, book.getBook_edition());
-            ps.setString(5, book.getBook_description());
-            ps.setString(6, book.getAuthor());
-            ps.setString(7, book.getPublisher());
-            ps.setInt(8, book.getQuantityInStock());
+            ps.setString(1, book_name);
+            ps.setString(2, book_isbn);
+            ps.setString(3, book_edition);
+            ps.setString(4, book_description);
+            ps.setString(5, author);
+            ps.setString(6, publisher);
+            ps.setInt(7, quantityInStock);
 
             rowsAffected = ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Exception BookDao.addBook(): " + e.getMessage());
-            e.printStackTrace();
-        } catch( Exception e ) {
+        } catch (Exception e) {
             System.out.println("Exception BookDao.addBook(): " + e.getMessage());
             e.printStackTrace();
         } finally {
@@ -146,9 +153,7 @@ public class BookDao extends Dao implements BookDaoInterface {
             }
         }
 
-        if (rowsAffected == -1 ) {
-            System.out.println("Book with this ID already exists");
-        } else if (rowsAffected != 1) {
+        if (rowsAffected != 1) {
             System.out.println("Book couldn't be added");
         }
         return rowsAffected == 1;

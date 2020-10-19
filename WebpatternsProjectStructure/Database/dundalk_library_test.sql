@@ -65,6 +65,7 @@ INSERT INTO `users` (`id`, `type`, `username`, `password`, `email`, `phoneNumber
 
 ALTER TABLE `book`
   ADD PRIMARY KEY (`book_id`),
+  ADD UNIQUE KEY `book_name` (`book_name`),
   ADD UNIQUE KEY `book_isbn` (`book_isbn`);
 
 ALTER TABLE `loan`

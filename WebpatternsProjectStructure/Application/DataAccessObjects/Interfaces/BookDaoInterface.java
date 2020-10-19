@@ -24,10 +24,16 @@ public interface BookDaoInterface {
     /**
      * Adding a Book to the DB
      *
-     * @param book Book to add
+     * @param book_name Book to add name
+     * @param book_isbn Book to add isbn
+     * @param book_edition Book to add edition
+     * @param book_description Book to add description
+     * @param author Book to add author
+     * @param publisher Book to add publisher
+     * @param quantityInStock Book to add quantityInStock
      * @return true if Book has been added, false if not
      */
-    boolean addBook(Book book);
+    public boolean addBook(String book_name, String book_isbn, String book_edition, String book_description, String author, String publisher, int quantityInStock);
 
     /**
      * Remove a Book from the DB

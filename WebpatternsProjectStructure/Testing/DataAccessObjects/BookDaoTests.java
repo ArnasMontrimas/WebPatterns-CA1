@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -48,8 +50,7 @@ public class BookDaoTests {
     @Test
     @Order(1)
     void testAddBookNew() {
-        Book book = new Book(
-                10,
+        boolean added = bookTestDao.addBook(
                 "Java: The Complete Reference",
                 "978-1260440232",
                 "11",
@@ -59,10 +60,16 @@ public class BookDaoTests {
                 60
         );
 
-        boolean added = bookTestDao.addBook(book);
-        Book fetchedbook = bookTestDao.findById(10);
+        ArrayList<Book> fetchedBooks = bookTestDao.getAllBooks();
+        Book bookAdded = null;
+        for (Book book : fetchedBooks) {
+            if (book.getBook_name().equals("Java: The Complete Reference"))
+                bookAdded = book;
+        }
 
-        assertTrue(added && fetchedbook.equals(book));
+        bookTestDao.removeBook(bookAdded);
+
+        assertTrue(added && bookAdded != null);
     }
 
     /**
@@ -70,9 +77,8 @@ public class BookDaoTests {
      */
     @Test
     void testAddBookAlreadyExisting() {
-        Book book = new Book(
-                1,
-                "Java: The Complete Reference",
+        boolean added = bookTestDao.addBook(
+                "Computing Intro",
                 "978-1260440232",
                 "11",
                 "The Definitive Java Programming Guide",
@@ -80,8 +86,6 @@ public class BookDaoTests {
                 "McGraw-Hill Education",
                 60
         );
-
-        boolean added = bookTestDao.addBook(book);
 
         assertFalse(added);
     }
@@ -92,10 +96,26 @@ public class BookDaoTests {
     @Test
     @Order(2)
     void testRemoveBookExisting() {
-        boolean removed = bookTestDao.removeBook(10);
-        Book fetchedbook = bookTestDao.findById(10);
+        boolean added = bookTestDao.addBook(
+                "Java: The Complete Reference",
+                "978-1260440232",
+                "11",
+                "The Definitive Java Programming Guide",
+                "Herbert Schildt",
+                "McGraw-Hill Education",
+                60
+        );
 
-        assertTrue(removed && fetchedbook == null);
+        ArrayList<Book> fetchedBooks = bookTestDao.getAllBooks();
+        Book bookAdded = null;
+        for (Book book : fetchedBooks) {
+            if (book.getBook_name().equals("Java: The Complete Reference"))
+                bookAdded = book;
+        }
+
+        boolean removed = bookTestDao.removeBook(bookAdded);
+
+        assertTrue(added && removed && bookAdded != null);
     }
 
     /**
