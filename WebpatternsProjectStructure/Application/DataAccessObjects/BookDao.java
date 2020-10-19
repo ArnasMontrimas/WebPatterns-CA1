@@ -58,6 +58,47 @@ public class BookDao extends Dao implements BookDaoInterface {
         return book;
     }
 
+
+    /**
+     * Get a Book object from it's Name
+     *
+     * @param book_name Book Name to get in DB
+     * @return The Book object if found, or null if no book with this Name
+     */
+    public Book findByName(String book_name) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Book book = null;
+
+        try{
+            con = getConnection();
+
+            ps = con.prepareStatement("SELECT * FROM book WHERE book_name = ?");
+            ps.setString(1, book_name);
+            rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                book = new Book(
+                        rs.getInt("book_id"),
+                        book_name,
+                        rs.getString("book_isbn"),
+                        rs.getString("book_edition"),
+                        rs.getString("book_description"),
+                        rs.getString("author"),
+                        rs.getString("publisher"),
+                        rs.getInt("quantityInStock")
+                );
+            }
+        }catch (SQLException e) {
+            System.out.println("Exception BookDao.findByName(): " + e.getMessage());
+        } finally {
+            closeDaoConnection(con, ps, rs);
+        }
+        return book;
+    }
+
     /**
      * Adding a Book to the DB
      *
@@ -88,6 +129,7 @@ public class BookDao extends Dao implements BookDaoInterface {
             rowsAffected = ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Exception BookDao.addBook(): " + e.getMessage());
+            e.printStackTrace();
         } catch( Exception e ) {
             System.out.println("Exception BookDao.addBook(): " + e.getMessage());
             e.printStackTrace();

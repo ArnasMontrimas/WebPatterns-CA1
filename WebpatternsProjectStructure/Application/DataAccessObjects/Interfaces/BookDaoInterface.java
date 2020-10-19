@@ -14,6 +14,14 @@ public interface BookDaoInterface {
     Book findById(int book_id);
 
     /**
+     * Get a Book object from it's Name
+     *
+     * @param book_name Book Name to get in DB
+     * @return The Book object if found, or null if no book with this Name
+     */
+    Book findByName(String book_name);
+
+    /**
      * Adding a Book to the DB
      *
      * @param book Book to add
