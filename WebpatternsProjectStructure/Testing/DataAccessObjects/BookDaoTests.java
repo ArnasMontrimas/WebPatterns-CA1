@@ -35,12 +35,42 @@ public class BookDaoTests {
     }
 
     /**
-     * Testing fetching a non-existing Book
+     * Testing fetching a non-existing Book from its ID
      */
     @Test
     void testFindByIdNonExistingBook() {
         // Fetching from ID
         Book bookFound = bookTestDao.findById(100);
+        assertNull(bookFound);
+    }
+
+    /**
+     * Testing fetching an existing Book from its name and check if objects are equal
+     */
+    @Test
+    void testFindByNameExistingBook() {
+        // Fetching from Name
+        Book bookFound = bookTestDao.findByName("Computing Intro");
+        Book bookModel = new Book(
+                1,
+                "Computing Intro",
+                "978-1-60309-025-4",
+                "1.1",
+                "Introduction to Computing Book ",
+                "William Shakespeare",
+                "Penguin Random House",
+                60
+        );
+        assertEquals(bookFound, bookModel);
+    }
+
+    /**
+     * Testing fetching a non-existing Book from its name
+     */
+    @Test
+    void testFindByNameNonExistingBook() {
+        // Fetching from Name
+        Book bookFound = bookTestDao.findByName("This nice Book doesn't exist at all, and that's normal because that is what we are searching and testing");
         assertNull(bookFound);
     }
 
