@@ -116,10 +116,11 @@ public class BookDao extends Dao implements BookDaoInterface {
         PreparedStatement ps = null;
         int rowsAffected = 0;
 
-        if (this.findByName(book_name) != null) {
-            System.out.println("Book with this Name already exists");
-            return false;
-        }
+        // Not needed here because checking in CLI
+      //  if (this.findByName(book_name) != null) {
+        //    System.out.println("Book with this Name already exists");
+        //    return false;
+     //   }
 
         try {
             con = getConnection();
@@ -278,7 +279,6 @@ public class BookDao extends Dao implements BookDaoInterface {
         int rowsAffected = 0;
 
         if (quantity < 0) {
-            System.out.println("BookDao.addCopies(): can't add <0 copies");
             return false;
         }
 

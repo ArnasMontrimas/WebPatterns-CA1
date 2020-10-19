@@ -425,9 +425,9 @@ public class UserDao extends Dao implements UserDaoInterface {
             ps = con.prepareStatement("Select * from users where username = ?");
             ps.setString(1,name);
             rs = ps.executeQuery();
-
+            // The username Exists on the system
             if (rs.next()){
-
+                // The user is a admin so cant disable
                 if (rs.getString("type").equals("Admin")){
                     result = -1;
                 } else {

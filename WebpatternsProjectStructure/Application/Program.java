@@ -21,6 +21,7 @@ public class Program {
         // Default View the user should only be able to see these 3 actions while not logged in
         if (user == null){
             System.out.println("-------------------------------------\n" +
+                    "|Type EN for English or FR for french !\n" +
                     "|Type 1: To Register !\n" +
                     "|Type 2: To Login !\n"+
                     "|Type 3: To view all the books in the library  !\n" +
@@ -30,6 +31,7 @@ public class Program {
         // If the user has logged in as a Member
         if (user != null && user.getType().equals("Member")){
             System.out.println("-------------------------------------\n" +
+                    "|Type EN for English or FR for french !\n" +
                     "|Logged In as: " +user.getUsername() +"\n"+
                     "|Type 3: To view all the books in the library  !\n" +
                     "|Type 4: To view all active loans !\n" +// only when logged in
@@ -44,6 +46,7 @@ public class Program {
         // If the user has logged in as a Admin
         if (user != null && user.getType().equals("Admin")){
             System.out.println("-------------------------------------\n" +
+                    "|Type EN for English or FR for french !\n" +
                     "|Logged In as Admin: " +user.getUsername() +"\n"+
                     "|Type 3: To view all the books in the library  !\n" +
                     "|Type 4: To view all active loans !\n" +
@@ -123,6 +126,15 @@ public class Program {
             String command = getCommand(userInput,user);
 
                 switch (command){
+
+                    case "EN":
+
+                        break;
+
+                    case "FR":
+
+                        break;
+
                     case "1":
                         System.out.println("Please type in your username.");
                         userName = validateString(userInput);
@@ -187,8 +199,12 @@ public class Program {
 
                     case "5":
                         if (user != null){
-                            for(Loan l: loanUserBookDao.allLoansSinceJoining(user) ) {
-                                displayLoan(l);
+                            if (loanUserBookDao.allLoansSinceJoining(user).isEmpty()){
+                                System.out.println("You have made no loans yet ");
+                            } else {
+                                for(Loan l: loanUserBookDao.allLoansSinceJoining(user) ) {
+                                    displayLoan(l);
+                                }
                             }
                         } else {
                             System.out.println("Please pick an appropriate number  !");
@@ -199,21 +215,23 @@ public class Program {
                         if (user != null){
                             System.out.println("Please type in the name of the book to loan");
                             String bookName = validateString(userInput);
+                            Book book = bookDao.findByName(bookName);
+                            if (book == null){
+                                System.out.println("That book does not exist");
+                            } else {
+                                System.out.println("Please type in the number of days to loan the book (Maximum 7 days)");
+                                int loanDays = userInput.nextInt();
 
-                            System.out.println("Please type in the number of days to loan the book (Maximum 7 days)");
-                            int loanDays = userInput.nextInt();
-
-                            // TODO: 15/10/2020 // HAVE TO CHECK IF BOOK EXISTS so correct book name has to be inserted here
-                            if(loanUserBookDao.loanBook(bookName,loanDays,user) == 1){
-                                System.out.println("You have loaned the book !");
-                            } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == -2){
-                                System.out.println("Books cant be loaned for longer than 7 days !");
-                            } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == -1){
-                                System.out.println("You already loan that book !");
-                            } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == 0){
-                                System.out.println("That book is out of stock !");
+                                if(loanUserBookDao.loanBook(bookName,loanDays,user) == 1){
+                                    System.out.println("You have loaned the book !");
+                                } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == -2){
+                                    System.out.println("Books cant be loaned for longer than 7 days !");
+                                } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == -1){
+                                    System.out.println("You already loan that book !");
+                                } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == 0){
+                                    System.out.println("That book is out of stock !");
+                                }
                             }
-
                         } else {
                             System.out.println("Please pick an appropriate number  !");
                         }
@@ -224,18 +242,19 @@ public class Program {
                         if (user != null){
                             System.out.println("Please type in the name of the book to return");
                             String bookName = validateString(userInput);
-
-                            // TODO: 15/10/2020 // HAVE TO CHECK IF BOOK EXISTS so correct book name has to be inserted here
-                            if (loanUserBookDao.returnBook(bookName,user)){
-                                System.out.println("The book has been returned thanks !");
+                            Book book = bookDao.findByName(bookName);
+                            if (book == null){
+                                System.out.println("That book does not exist");
                             } else {
-                                System.out.println("You do not have that book loaned");
+                                if (loanUserBookDao.returnBook(bookName,user)){
+                                    System.out.println("The book has been returned thanks !");
+                                } else {
+                                    System.out.println("You do not have that book loaned");
+                                }
                             }
-
                         } else {
                             System.out.println("Please pick an appropriate number  !");
                         }
-
                         break;
 
 
@@ -250,18 +269,27 @@ public class Program {
                         if (user != null && user.getType().equals("Admin")){
                             System.out.println("Please type the title of the Book to add");
                             String title = validateString(userInput);
-                            System.out.println("Please type the ISBN of the  Book");
-                            String ISBN = validateString(userInput);
-                            System.out.println("Please type the Book edition");
-                            String edition = validateString(userInput);
-                            System.out.println("Please type the Book description");
-                            String description = validateString(userInput);
-                            System.out.println("Please type the Book author");
-                            String author = validateString(userInput);
-                            System.out.println("Please type the Book publisher");
-                            String publisher = validateString(userInput);
-                            System.out.println("Please type the quantity of the book to be added");
-                            int quantity = userInput.nextInt();
+                            Book book = bookDao.findByName(title);
+                            if (book != null){
+                                System.out.println("A book with that name already exists");
+                            } else {
+                                System.out.println("Please type the ISBN of the  Book");
+                                String ISBN = validateString(userInput);
+                                System.out.println("Please type the Book edition");
+                                String edition = validateString(userInput);
+                                System.out.println("Please type the Book description");
+                                String description = validateString(userInput);
+                                System.out.println("Please type the Book author");
+                                String author = validateString(userInput);
+                                System.out.println("Please type the Book publisher");
+                                String publisher = validateString(userInput);
+                                System.out.println("Please type the quantity of the book to be added");
+                                // TODO: 15/10/2020 // VALIDATION HERE NEEDED not only for string but for 0 quantity
+                                int quantity = userInput.nextInt();
+                                bookDao.addBook(title,ISBN,edition,description,author,publisher,quantity);
+                                System.out.println("Your book as been added");
+                            }
+
                         } else {
                             System.out.println("Please pick an appropriate number  !");
                         }
@@ -271,9 +299,20 @@ public class Program {
                         if (user != null && user.getType().equals("Admin")){
                             System.out.println("Please type the title of the Book to increase its quantity");
                             String title = validateString(userInput);
-                            // TODO: 15/10/2020 // VALIDATION HERE NEEDED not only for string but for 0 quantity
-                            System.out.println("Please type the quantity");
-                            int quantity = userInput.nextInt();
+                            Book book = bookDao.findByName(title);
+                            if (book == null){
+                                System.out.println("No book by that name exists in the system");
+                            } else {
+                                // Book exists so ask for quantity and add it
+                                System.out.println("Please type the quantity");
+                                int quantity = userInput.nextInt();
+                                // TODO: 19/10/2020 just string validation needed here for int 
+                                if (bookDao.addCopies(book.getBook_id(),quantity)){
+                                    System.out.println("Quantity increased");
+                                } else {
+                                    System.out.println("Quantity cant be 0");
+                                }
+                            }
                         } else {
                             System.out.println("Please pick an appropriate number  !");
                         }
@@ -299,11 +338,7 @@ public class Program {
 
                     default:
                         System.out.println("Please pick an appropriate number  !"); // internaliozed
-
                 }
-
-
-
         }
     }
 }

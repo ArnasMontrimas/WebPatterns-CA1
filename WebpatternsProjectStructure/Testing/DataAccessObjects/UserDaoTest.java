@@ -105,12 +105,18 @@ class UserDaoTest {
     }
 
     @Test
-    void validateUserObject() {
-
-        // Should return 0 since that username and password dont match
+    void validateUserObjectTest() {
+        // Should return true since the User by that ID 1 is the same as the user object
         User user = new User(1,"Member","Sam","sam1","sam@gmail.com","0838568457","2020-10-12 17:13:03",true);
         userDaoTest.getUserByID(1);
         assertEquals(userDaoTest.getUserByID(1),user);
+    }
+
+    @Test
+    void disableAdminAccountTest() {
+        // Should return -1 because u cant disable a admins accont
+        User user = new User(3,"Admin","AdminBob","adminpass","bob@gmail.com","0896542568","2020-10-12 17:16:04",true);
+        userDaoTest.disableMembersAccount("AdminBob");
     }
 
 
