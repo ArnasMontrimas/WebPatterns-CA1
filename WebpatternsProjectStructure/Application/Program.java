@@ -136,48 +136,57 @@ public class Program {
                         break;
 
                     case "1":
-                        System.out.println("Please type in your username.");
-                        userName = validateString(userInput);
-                        while (!userDao.validateUsername(userName)){
-                            System.out.println("That username exists try again.");
+                        if (user == null){
+                            System.out.println("Please type in your username.");
                             userName = validateString(userInput);
-                        }
+                            while (!userDao.validateUsername(userName)){
+                                System.out.println("That username exists try again.");
+                                userName = validateString(userInput);
+                            }
 
-                        System.out.println("Please type in your password.");
-                        passWord = validateString(userInput);
+                            System.out.println("Please type in your password.");
+                            passWord = validateString(userInput);
 
-                        System.out.println("Please type in your email address.");
-                        email = validateString(userInput);
-                        while (!userDao.validateEmail(email)){
-                            System.out.println("That email exists try again.");
+                            System.out.println("Please type in your email address.");
                             email = validateString(userInput);
+                            while (!userDao.validateEmail(email)){
+                                System.out.println("That email exists try again.");
+                                email = validateString(userInput);
+                            }
+
+                            System.out.println("Please type in your phone number.");
+                            phoneNumber = validateString(userInput);
+                            while (!userDao.validatePhonenumber(phoneNumber)){
+                                System.out.println("That phone number already exists try again.");
+                                phoneNumber = validateString(userInput);
+                            }
+                            // Finally after all validation insert a member into the table.
+                            userDao.registerUser(userName,passWord,email,phoneNumber);
+                            System.out.println("Your account has been registered !");
+                        } else {
+                            System.out.println("Please pick an appropriate number  !");
                         }
 
-                        System.out.println("Please type in your phone number.");
-                        phoneNumber = validateString(userInput);
-                        while (!userDao.validatePhonenumber(phoneNumber)){
-                            System.out.println("That phone number already exists try again.");
-                            phoneNumber = validateString(userInput);
-                        }
-                        // Finally after all validation insert a member into the table.
-                        userDao.registerUser(userName,passWord,email,phoneNumber);
-                        System.out.println("Your account has been registered !");
                         break;
 
                     case "2":
-                        System.out.println("Please type in your username.");
-                        userName = validateString(userInput);
-                        System.out.println("Please type in your password.");
-                        passWord = validateString(userInput);
-                        userID = userDao.validateLogin(userName,passWord);
-                        if (userID == 0){
-                            System.out.println("The username or password is incorrect please try again");
-                        } else if (userID == -1){
-                            System.out.println("The account has been disabled please create a new account");
-                            userID = 0;
+                        if (user == null){
+                            System.out.println("Please type in your username.");
+                            userName = validateString(userInput);
+                            System.out.println("Please type in your password.");
+                            passWord = validateString(userInput);
+                            userID = userDao.validateLogin(userName,passWord);
+                            if (userID == 0){
+                                System.out.println("The username or password is incorrect please try again");
+                            } else if (userID == -1){
+                                System.out.println("The account has been disabled please create a new account");
+                                userID = 0;
+                            } else {
+                                user = userDao.getUserByID(userID);
+                                System.out.println("Welcome " + user.getUsername() + " to the dundalk library !");
+                            }
                         } else {
-                            user = userDao.getUserByID(userID);
-                            System.out.println("Welcome " + user.getUsername() + " to the dundalk library !");
+                            System.out.println("Please pick an appropriate number  !");
                         }
                         break;
 
@@ -285,8 +294,8 @@ public class Program {
                                 String publisher = validateString(userInput);
                                 System.out.println("Please type the quantity of the book to be added");
                                 // TODO: 15/10/2020 // VALIDATION HERE NEEDED not only for string but for 0 quantity
-                                int quantity = userInput.nextInt();
-                                bookDao.addBook(title,ISBN,edition,description,author,publisher,quantity);
+                                String quantity = validateString(userInput);
+                                bookDao.addBook(title,ISBN,edition,description,author,publisher,Integer.parseInt(quantity));
                                 System.out.println("Your book as been added");
                             }
 
@@ -305,9 +314,9 @@ public class Program {
                             } else {
                                 // Book exists so ask for quantity and add it
                                 System.out.println("Please type the quantity");
-                                int quantity = userInput.nextInt();
+                                String quantity = validateString(userInput);
                                 // TODO: 19/10/2020 just string validation needed here for int 
-                                if (bookDao.addCopies(book.getBook_id(),quantity)){
+                                if (bookDao.addCopies(book.getBook_id(),Integer.parseInt(quantity))){
                                     System.out.println("Quantity increased");
                                 } else {
                                     System.out.println("Quantity cant be 0");

@@ -278,7 +278,7 @@ public class BookDao extends Dao implements BookDaoInterface {
         PreparedStatement ps = null;
         int rowsAffected = 0;
 
-        if (quantity < 0) {
+        if (quantity <= 0) {
             return false;
         }
 
