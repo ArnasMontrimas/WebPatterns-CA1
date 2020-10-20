@@ -3,10 +3,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
 import DataAccessObjects.*;
 import DataTransferObjects.Book;
 import DataTransferObjects.Loan;
@@ -115,6 +113,10 @@ public class Program {
         // Has to be internalized to french based on locale ?
         System.out.println("***** Welcome to the Dundalk Library service ! *****");
 
+        // Default English
+        Locale chosenLocale = new Locale("en","gb");
+        ResourceBundle bookMessages = ResourceBundle.getBundle("Languages.Book",chosenLocale);
+
         User user = null;
         int userID = 0;
         String userName;
@@ -128,11 +130,13 @@ public class Program {
                 switch (command){
 
                     case "EN":
-
+                        chosenLocale = new Locale("en","gb");
+                        bookMessages = ResourceBundle.getBundle("Languages.Book",chosenLocale);
                         break;
 
                     case "FR":
-
+                        chosenLocale = new Locale("fr","fr");
+                        bookMessages = ResourceBundle.getBundle("Languages.Book",chosenLocale);
                         break;
 
                     case "1":
@@ -280,7 +284,7 @@ public class Program {
                             String title = validateString(userInput);
                             Book book = bookDao.findByName(title);
                             if (book != null){
-                                System.out.println("A book with that name already exists");
+                                System.out.println(bookMessages.getString("addBook_id_exists"));
                             } else {
                                 System.out.println("Please type the ISBN of the  Book");
                                 String ISBN = validateString(userInput);
