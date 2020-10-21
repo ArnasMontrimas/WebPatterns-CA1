@@ -1,5 +1,6 @@
-package DataAccessObjects;
+package DataAccessObjectsTests;
 
+import DataAccessObjects.BookDao;
 import DataTransferObjects.Book;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

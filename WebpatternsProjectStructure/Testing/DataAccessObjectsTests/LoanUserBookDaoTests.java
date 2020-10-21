@@ -1,5 +1,6 @@
-package DataAccessObjects;
+package DataAccessObjectsTests;
 
+import DataAccessObjects.LoanUserBookDao;
 import DataTransferObjects.Book;
 import DataTransferObjects.Loan;
 import DataTransferObjects.User;
