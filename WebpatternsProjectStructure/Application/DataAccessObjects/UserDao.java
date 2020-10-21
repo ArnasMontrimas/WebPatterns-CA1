@@ -1,5 +1,6 @@
 package DataAccessObjects;
 
+import Program.Program;
 import DataAccessObjects.Interfaces.UserDaoInterface;
 import DataTransferObjects.User;
 
@@ -49,16 +50,15 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println("An exception occurred while querying "
-                    + "the users table in the validateUsername() method\n"
-                    + ex.getMessage());
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            ex.printStackTrace();
         }
         finally{
             if(rs != null){
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing result set" );
+                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -66,7 +66,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing prepared statement" );
+                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
