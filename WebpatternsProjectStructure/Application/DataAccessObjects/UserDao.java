@@ -104,16 +104,15 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println("An exception occurred while querying "
-                    + "the users table in the validateEmail() method\n"
-                    + ex.getMessage());
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            ex.printStackTrace();
         }
         finally{
             if(rs != null){
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing result set" );
+                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -121,7 +120,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing prepared statement" );
+                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -159,16 +158,15 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println("An exception occurred while querying "
-                    + "the users table in the validatePhonenumber() method\n"
-                    + ex.getMessage());
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            ex.printStackTrace();
         }
         finally{
             if(rs != null){
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing result set" );
+                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -176,7 +174,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing prepared statement" );
+                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -211,7 +209,8 @@ public class UserDao extends Dao implements UserDaoInterface {
             rowsAffected = ps.executeUpdate();
 
         }catch (SQLException e) {
-            System.out.println("Exception occured while inserting into users table: " + e.getMessage());
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users_Insert"));
+            e.printStackTrace();
         } finally {
             try {
                 if (ps != null) {
@@ -221,7 +220,8 @@ public class UserDao extends Dao implements UserDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println("Exception occured in the finally section of the registerUser() method: " + e.getMessage());
+                System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
+                e.printStackTrace();
             }
         }
         return rowsAffected != 0;
@@ -257,16 +257,15 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println("An exception occurred while querying "
-                    + "the users table in the validateLogin() method\n"
-                    + ex.getMessage());
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            ex.printStackTrace();
         }
         finally{
             if(rs != null){
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing result set" );
+                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -274,7 +273,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing prepared statement" );
+                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -317,10 +316,8 @@ public class UserDao extends Dao implements UserDaoInterface {
                     ));
                 }
             } else {
-                System.out.println("Nothing Found");
                 users = null;
             }
-
         } catch (SQLException e) {
             System.err.println("Exception Occurred: " + e.getMessage());
         } finally {
@@ -328,7 +325,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing result set" );
+                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -336,7 +333,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing prepared statement" );
+                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -379,16 +376,15 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println("An exception occurred while querying "
-                    + "the users table in the validateLogin() method\n"
-                    + ex.getMessage());
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            ex.printStackTrace();
         }
         finally{
             if(rs != null){
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing result set" );
+                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -396,7 +392,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing prepared statement" );
+                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -445,16 +441,15 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println("An exception occurred while querying "
-                    + "the users table in the validateLogin() method\n"
-                    + ex.getMessage());
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            ex.printStackTrace();
         }
         finally{
             if(rs != null){
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing result set" );
+                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -462,7 +457,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println("Exception when closing prepared statement" );
+                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
