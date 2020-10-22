@@ -326,8 +326,7 @@ public class BookDao extends Dao implements BookDaoInterface {
         PreparedStatement ps = null;
         int rowsAffected = 0;
 
-        if (quantity < 0) {
-            System.out.println("BookDao.removeCopies(): can't remove <0 copies");
+        if (quantity <= 0) {
             return false;
         }
 

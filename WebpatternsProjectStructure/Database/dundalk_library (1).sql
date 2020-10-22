@@ -9,6 +9,27 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `dundalk_library` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `dundalk_library`;
 
+CREATE TABLE `address` (
+  `address_id` int(11) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `address1` varchar(300) NOT NULL,
+  `address2` varchar(300) DEFAULT NULL,
+  `city` varchar(25) NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  `country` varchar(25) NOT NULL,
+  `postalcode` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `address` (`address_id`, `first_name`, `last_name`, `address1`, `address2`, `city`, `state`, `country`, `postalcode`) VALUES
+(1, 'Sam', 'Smith', 'Cavan Town', 'Cavan Green Hills', 'Cavan', NULL, 'Ireland', '141478'),
+(2, 'Arnas', 'Smith', 'Lakepark', NULL, 'NewYork', 'NY', 'America', '154875'),
+(3, 'Bob', 'Smith', '43 Calm Hills', '47 Rock Road', 'Dundalk', NULL, 'Ireland', '458752'),
+(4, 'Malo', 'Smith', '55 Lake Road', NULL, 'Paris', NULL, 'France', '147859'),
+(5, 'John', 'Smith', '59 Stone Road', NULL, 'Njork', NULL, 'Norway', 'NZ_5487'),
+(6, 'Samuel', 'Smith', '59 Pebble Road', NULL, 'Luhar', NULL, 'Pakistan', 'PK_1478'),
+(18, 'David', 'Smith', '48 Blank ROad', NULL, 'Cavan', NULL, 'Ireland', '874');
+
 CREATE TABLE `book` (
   `book_id` int(11) NOT NULL,
   `book_name` varchar(35) NOT NULL,
@@ -51,17 +72,22 @@ CREATE TABLE `users` (
   `email` varchar(40) NOT NULL,
   `phoneNumber` varchar(12) NOT NULL,
   `dateRegistered` timestamp NOT NULL DEFAULT current_timestamp(),
-  `activeAccount` tinyint(1) NOT NULL
+  `activeAccount` tinyint(1) NOT NULL,
+  `address` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `users` (`id`, `type`, `username`, `password`, `email`, `phoneNumber`, `dateRegistered`, `activeAccount`) VALUES
-(1, 'Member', 'Sam', 'sam1', 'sam@gmail.com', '0838568457', '2020-10-12 16:13:03', 1),
-(2, 'Member', 'Arnas', '1', 'arnas@gmail.com', '0869542586', '2020-10-12 16:13:03', 1),
-(3, 'Admin', 'AdminBob', '1', 'bob@gmail.com', '0896542568', '2020-10-12 16:16:04', 1),
-(4, 'Member', 'Malo', '1', 'malo@gmail.com', '2589652365', '2020-10-12 16:20:05', 1),
-(5, 'Admin', 'AdminJohn', '1', 'john@gmail.com', '0256985478', '2020-10-12 16:20:05', 1),
-(6, 'Member', 'Sam1', '1', 'sam1@gmail.com', '0589653258', '2020-10-12 16:20:54', 0);
+INSERT INTO `users` (`id`, `type`, `username`, `password`, `email`, `phoneNumber`, `dateRegistered`, `activeAccount`, `address`) VALUES
+(1, 'Member', 'Sam', 'sam1', 'sam@gmail.com', '0838568457', '2020-10-12 16:13:03', 1, 1),
+(2, 'Member', 'Arnas', '1', 'arnas@gmail.com', '0869542586', '2020-10-12 16:13:03', 1, 2),
+(3, 'Admin', 'AdminBob', '1', 'bob@gmail.com', '0896542568', '2020-10-12 16:16:04', 1, 3),
+(4, 'Member', 'Malo', '1', 'malo@gmail.com', '2589652365', '2020-10-12 16:20:05', 1, 4),
+(5, 'Admin', 'AdminJohn', '1', 'john@gmail.com', '0256985478', '2020-10-12 16:20:05', 1, 5),
+(6, 'Member', 'Sam1', '1', 'sam1@gmail.com', '0589653258', '2020-10-12 16:20:54', 0, 6),
+(13, 'Member', 'David', 'Smith', 'david@gmail.com', '2548965874', '2020-10-22 17:41:27', 1, 18);
 
+
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`address_id`);
 
 ALTER TABLE `book`
   ADD PRIMARY KEY (`book_id`),
@@ -74,8 +100,12 @@ ALTER TABLE `loan`
   ADD KEY `bookLoanConstraint` (`loan_book_id`);
 
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `address_fk` (`address`);
 
+
+ALTER TABLE `address`
+  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 ALTER TABLE `book`
   MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
@@ -84,12 +114,15 @@ ALTER TABLE `loan`
   MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 
 ALTER TABLE `loan`
   ADD CONSTRAINT `bookLoanConstraint` FOREIGN KEY (`loan_book_id`) REFERENCES `book` (`book_id`),
   ADD CONSTRAINT `userLoanConstraint` FOREIGN KEY (`loan_user_id`) REFERENCES `users` (`id`);
+
+ALTER TABLE `users`
+  ADD CONSTRAINT `address_fk` FOREIGN KEY (`address`) REFERENCES `address` (`address_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

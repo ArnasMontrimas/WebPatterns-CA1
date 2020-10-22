@@ -9,15 +9,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import DataAccessObjects.*;
+import DataTransferObjects.Address;
 import DataTransferObjects.Book;
 import DataTransferObjects.Loan;
 import DataTransferObjects.User;
 
 public class Program {
 
+    // Default English
     public static final String DATABASE = "dundalk_library";
-    public static ResourceBundle bookMessages;
-    public static ResourceBundle globalMessages;
+    public static Locale chosenLocale = new Locale("en","gb");
+    public static ResourceBundle bookMessages = ResourceBundle.getBundle("Languages.Book",chosenLocale);
+    public static ResourceBundle globalMessages= ResourceBundle.getBundle("Languages.Global",chosenLocale);
 
     private static String getCommand(Scanner userInput,User user,ResourceBundle language) {
 
@@ -84,11 +87,6 @@ public class Program {
         Scanner userInput = new Scanner(System.in);
         boolean librarySystemOnline = true;
 
-        // Default English
-        Locale chosenLocale = new Locale("en","gb");
-        bookMessages = ResourceBundle.getBundle("Languages.Book",chosenLocale);
-        globalMessages = ResourceBundle.getBundle("Languages.Global",chosenLocale);
-
         System.out.println(globalMessages.getString("main_dundalk"));
 
         User user = null;
@@ -140,13 +138,35 @@ public class Program {
                                 System.out.println(globalMessages.getString("main_PhoneExists"));
                                 phoneNumber = validateString(userInput,globalMessages);
                             }
+                            System.out.println(globalMessages.getString("main_address"));
+                            System.out.println(globalMessages.getString("main_FirstName"));
+                            String firstName = validateString(userInput,globalMessages);
+                            System.out.println(globalMessages.getString("main_LastName"));
+                            String lastName = validateString(userInput,globalMessages);
+                            System.out.println(globalMessages.getString("main_addressDetails"));
+                            String address = validateString(userInput,globalMessages);
+                            System.out.println(globalMessages.getString("main_city"));
+                            String city = validateString(userInput,globalMessages);
+                            System.out.println(globalMessages.getString("main_country"));
+                            String country = validateString(userInput,globalMessages);
+                            String state = null;
+
+                            if (country.equalsIgnoreCase("America")){
+                                System.out.println(globalMessages.getString("main_state"));
+                                state = validateString(userInput,globalMessages);
+                            }
+                            System.out.println(globalMessages.getString("main_postal"));
+                            String postalCode = validateString(userInput,globalMessages);
+
+                            // Insert the Address Details First
+                            int addressID = userDao.insertAddress(firstName,lastName,address,city,state,country,postalCode);
+
                             // Finally after all validation insert a member into the table.
-                            userDao.registerUser(userName,passWord,email,phoneNumber);
+                            userDao.registerUser(userName,passWord,email,phoneNumber,addressID);
                             System.out.println(globalMessages.getString("main_Registered"));
                         } else {
                             System.out.println(globalMessages.getString("main_Default"));
                         }
-
                         break;
 
                     case "2":
@@ -178,8 +198,12 @@ public class Program {
 
                     case "4":
                         if (user != null){
-                            for(Loan l: loanUserBookDao.allLoansByUserId(user) ) {
-                                displayLoan(l,chosenLocale,globalMessages);
+                            if (loanUserBookDao.allLoansByUserId(user).isEmpty()){
+                                System.out.println(globalMessages.getString("main_noLoans"));
+                            } else {
+                                for(Loan l: loanUserBookDao.allLoansByUserId(user) ) {
+                                    displayLoan(l,chosenLocale,globalMessages);
+                                }
                             }
                         } else {
                             System.out.println(globalMessages.getString("main_Default"));
@@ -318,6 +342,27 @@ public class Program {
                                 System.out.println(globalMessages.getString("main_AdminDisable"));
                             } else if (userDao.disableMembersAccount(username) == -2){
                                 System.out.println(globalMessages.getString("main_AlreadyDisabled"));
+                            }
+                        } else {
+                            System.out.println(globalMessages.getString("main_Default"));
+                        }
+                        break;
+
+                    case "12":
+                        if (user != null && user.getType().equals("Admin")){
+                            System.out.println(globalMessages.getString("main_DecBookQty"));
+                            String title = validateString(userInput,globalMessages);
+                            Book book = bookDao.findByName(title);
+                            if (book == null){
+                                System.out.println(globalMessages.getString("main_NoBookByName"));
+                            } else {
+                                System.out.println(globalMessages.getString("main_Quantity"));
+                                String quantity = validateString(userInput,globalMessages);
+                                if (bookDao.removeCopies(book.getBook_id(),Integer.parseInt(quantity))){
+                                    System.out.println(globalMessages.getString("main_QtyDec"));
+                                } else {
+                                    System.out.println(globalMessages.getString("main_QtyDenied"));
+                                }
                             }
                         } else {
                             System.out.println(globalMessages.getString("main_Default"));

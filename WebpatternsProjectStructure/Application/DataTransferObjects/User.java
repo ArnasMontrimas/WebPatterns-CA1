@@ -15,9 +15,10 @@ public class User {
     private String phoneNumber;
     private String dateRegistered;
     private boolean activeAccount;
+    private Address address;
 
     //Constructor
-    public User(int id, String type, String username, String password, String email, String phoneNumber, String dateRegistered, boolean activeAccount) {
+    public User(int id, String type, String username, String password, String email, String phoneNumber, String dateRegistered, boolean activeAccount,Address address) {
         this.id = id;
         this.type = type;
         this.username = username;
@@ -26,6 +27,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.dateRegistered = dateRegistered;
         this.activeAccount = activeAccount;
+        this.address = address;
     }
 
     //Rest is boilerplate
@@ -93,6 +95,13 @@ public class User {
         this.activeAccount = activeAccount;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,15 +120,16 @@ public class User {
 
     @Override
     public String toString() {
-        return "\nUser{" +
+        return "User{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", phoneNumber=" + phoneNumber +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", dateRegistered='" + dateRegistered + '\'' +
                 ", activeAccount=" + activeAccount +
+                ", address=" + address +
                 '}';
     }
 }

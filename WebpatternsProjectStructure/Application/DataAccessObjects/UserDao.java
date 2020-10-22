@@ -1,5 +1,6 @@
 package DataAccessObjects;
 
+import DataTransferObjects.Address;
 import Program.Program;
 import DataAccessObjects.Interfaces.UserDaoInterface;
 import DataTransferObjects.User;
@@ -194,22 +195,23 @@ public class UserDao extends Dao implements UserDaoInterface {
      * @param phonenumber The phone number for the account
      */
     @Override
-    public boolean registerUser(String username, String password, String email, String phonenumber) {
+    public boolean registerUser(String username, String password, String email, String phonenumber,int addressID) {
         Connection con = null;
         PreparedStatement ps = null;
         int rowsAffected = 0;
 
         try{
             con = getConnection();
-            ps = con.prepareStatement("INSERT into users VALUES(NULL,'Member',?,?,?,?,current_timestamp(),true)");
+            ps = con.prepareStatement("INSERT into users VALUES(NULL,'Member',?,?,?,?,current_timestamp(),true,?)");
             ps.setString(1,username);
             ps.setString(2,password);
             ps.setString(3,email);
             ps.setString(4,phonenumber);
+            ps.setInt(5,addressID);
             rowsAffected = ps.executeUpdate();
 
         }catch (SQLException e) {
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users_Insert"));
+           // System.out.println(Program.bookMessages.getString("UserDao_Sql_Users_Insert"));
             e.printStackTrace();
         } finally {
             try {
@@ -220,12 +222,65 @@ public class UserDao extends Dao implements UserDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
+              //  System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
                 e.printStackTrace();
             }
         }
         return rowsAffected != 0;
       }
+
+    /**
+     * Method to insert the users address into the address table and return the users address primary key for the users table
+     */
+    @Override
+    public int insertAddress(String firstname,String lastname,String address,String city,String state,String country,String postalcode) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query;
+        int addressID = 0;
+
+        try{
+           query = "INSERT INTO address VALUES(NULL,?,?,?,NULL,?,?,?,?)";
+           con = getConnection();
+           ps = con.prepareStatement(query);
+
+           ps.setString(1,firstname);
+           ps.setString(2,lastname);
+           ps.setString(3,address);
+           ps.setString(4,city);
+           ps.setString(5,state);
+           ps.setString(6,country);
+           ps.setString(7,postalcode);
+
+            ps.executeUpdate();
+            query = "SELECT max(address_id) from address";
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            if (rs.next()){
+                addressID = rs.getInt("max(address_id)");
+            }
+
+        }catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    freeConnection(con);
+                }
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
+        }
+        return addressID;
+    }
 
     /**
      * @return Returns the unique ID of the user if password/username match else return 0 if the account is disabled by admin return -1
@@ -285,66 +340,6 @@ public class UserDao extends Dao implements UserDaoInterface {
     }
 
     /**
-     * This method queries the db for all users
-     * @return all users from database
-     * @author Arnas
-     */
-    @Override
-    public ArrayList<User> getAllUsers() {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        ArrayList<User> users = new ArrayList<>();
-
-        try {
-            con = getConnection();
-            ps = con.prepareStatement("SELECT * FROM users");
-            rs = ps.executeQuery();
-
-            if(rs.isBeforeFirst()) {
-                while(rs.next()) {
-                    users.add(new User(
-                            rs.getInt("id"),
-                            rs.getString("type"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getString("phoneNumber"),
-                            rs.getString("dateRegistered"),
-                            rs.getBoolean("activeAccount")
-                    ));
-                }
-            } else {
-                users = null;
-            }
-        } catch (SQLException e) {
-            System.err.println("Exception Occurred: " + e.getMessage());
-        } finally {
-            if(rs != null){
-                try {
-                    rs.close();
-                } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
-                    ex.printStackTrace();
-                }
-            }
-            if(ps != null){
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
-                    ex.printStackTrace();
-                }
-            }
-            if(con != null){
-                freeConnection(con);
-            }
-        }
-        return users;
-    }
-
-    /**
      * Gets the user object by the primary key which is the ID
      * @return the User object
      * @param userID The id of the user
@@ -355,10 +350,38 @@ public class UserDao extends Dao implements UserDaoInterface {
         PreparedStatement ps = null;
         ResultSet rs = null;
         User user = null;
-
+        Address address = null;
+        String query;
+        int addressID = 0;
         try{
             con = getConnection();
-            String query = "SELECT * FROM users WHERE id = ?";
+            query = "SELECT address FROM users WHERE id = ?";
+            ps = con.prepareStatement(query);
+            ps.setInt(1,userID);
+            rs = ps.executeQuery();
+            if (rs.next()){
+                addressID = rs.getInt("address");
+            }
+
+            query = "SELECT * FROM address WHERE address_id = ?";
+            ps = con.prepareStatement(query);
+            ps.setInt(1,addressID);
+            rs = ps.executeQuery();
+
+            if (rs.next()){
+                address = new Address(
+                rs.getInt("address_id"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("address1"),
+                rs.getString("address2"),
+                rs.getString("city"),
+                rs.getString("state"),
+                rs.getString("country"),
+                rs.getString("postalcode")
+               );
+            }
+            query = "SELECT * FROM users WHERE id = ?";
             ps = con.prepareStatement(query);
             ps.setInt(1,userID);
             rs = ps.executeQuery();
@@ -371,8 +394,9 @@ public class UserDao extends Dao implements UserDaoInterface {
                         rs.getString("email"),
                         rs.getString("phoneNumber"),
                         rs.getString("dateRegistered"),
-                        rs.getBoolean("activeAccount")
-                        );
+                        rs.getBoolean("activeAccount"),
+                        address
+                );
             }
         }
         catch(SQLException ex){
@@ -400,6 +424,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                 freeConnection(con);
             }
         }
+        //System.out.println(user.toString());
         return user;
     }
 
