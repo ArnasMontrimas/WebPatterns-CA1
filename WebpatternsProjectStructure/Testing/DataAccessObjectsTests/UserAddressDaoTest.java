@@ -3,15 +3,14 @@ package DataAccessObjectsTests;
 import DataTransferObjects.*;
 import DataAccessObjects.*;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.Assert.*;
 
 /**
  * @author Sam Ponik
  */
-class UserDaoTest {
+class UserAddressDaoTest {
 
-    UserDao userDaoTest = new UserDao("dundalk_library_test");
+    UserAddressDao userAddressDaoTest = new UserAddressDao("dundalk_library_test");
 
     /**
      * Junit Tests for all methods associated with UserDao
@@ -23,7 +22,7 @@ class UserDaoTest {
      */
     @Test
     void validateTakenUsernameTest() {
-        boolean nameExists = userDaoTest.validateUsername("Sam");
+        boolean nameExists = userAddressDaoTest.validateUsername("Sam");
         assertFalse(nameExists);
     }
 
@@ -33,7 +32,7 @@ class UserDaoTest {
      */
     @Test
     void validateAvailableUsernameTest() {
-        boolean nameExists = userDaoTest.validateUsername("TEST_USER_NAME");
+        boolean nameExists = userAddressDaoTest.validateUsername("TEST_USER_NAME");
         assertTrue(nameExists);
     }
 
@@ -43,7 +42,7 @@ class UserDaoTest {
      */
     @Test
     void validateTakenEmailTest() {
-        boolean emailExists = userDaoTest.validateEmail("sam@gmail.com");
+        boolean emailExists = userAddressDaoTest.validateEmail("sam@gmail.com");
         assertFalse(emailExists);
     }
 
@@ -53,7 +52,7 @@ class UserDaoTest {
      */
     @Test
     void validateAvailableEmailTest() {
-        boolean emailExists = userDaoTest.validateUsername("TEST_EMAIL@gmail.com");
+        boolean emailExists = userAddressDaoTest.validateUsername("TEST_EMAIL@gmail.com");
         assertTrue(emailExists);
     }
 
@@ -63,7 +62,7 @@ class UserDaoTest {
      */
     @Test
     void validateTakenPhonenumberTest() {
-        boolean phoneExists = userDaoTest.validatePhonenumber("0838568457");
+        boolean phoneExists = userAddressDaoTest.validatePhonenumber("0838568457");
         assertFalse(phoneExists);
     }
 
@@ -73,7 +72,7 @@ class UserDaoTest {
      */
     @Test
     void validateAvailablePhonenumberTest() {
-        boolean phoneExists = userDaoTest.validatePhonenumber("9999999999");
+        boolean phoneExists = userAddressDaoTest.validatePhonenumber("9999999999");
         assertTrue(phoneExists);
     }
 
@@ -85,7 +84,8 @@ class UserDaoTest {
      */
     @Test
     void insertMemberTest() {
-        //assertTrue(userDaoTest.registerUser("TEST_USER","test","test@gmail.com","0000000000"));
+        int addressKey = userAddressDaoTest.insertAddress("INSERT_TEST_FNAME","INSERT_TEST_LNAME","INSERT_TEST_ADDRESS","INSERT_TEST_ADDRESS2","INSERT_TEST_CITY","INSERT_TEST_STATE","INSERT_TEST_COUNTRY","01010101");
+        assertTrue(userAddressDaoTest.registerUser("TEST_USER","test","test@gmail.com","0000000000",addressKey));
     }
 
     /**
@@ -95,7 +95,7 @@ class UserDaoTest {
     @Test
     void validateCorrectCredentialsTest() {
         int correctID = 1;
-        assertEquals(correctID,userDaoTest.validateLogin("Sam","sam1"));
+        assertEquals(correctID, userAddressDaoTest.validateLogin("Sam","sam1"));
     }
 
     /**
@@ -105,7 +105,7 @@ class UserDaoTest {
     @Test
     void validateIncorrectCredentialsTest() {
         int response = 0;
-        assertEquals(response,userDaoTest.validateLogin("Sam","TEST"));
+        assertEquals(response, userAddressDaoTest.validateLogin("Sam","TEST"));
     }
 
     /**
@@ -116,7 +116,7 @@ class UserDaoTest {
     void validateUserObjectTest() {
         Address address = new Address(1,"Sam","Smith","Cavan Town","Cavan Green Hills","Cavan",null,"Ireland","141478");
         User user = new User(1,"Member","Sam","sam1","sam@gmail.com","0838568457","2020-10-12 17:13:03",true,address);
-        assertEquals(userDaoTest.getUserByID(1),user);
+        assertEquals(userAddressDaoTest.getUserByID(1),user);
     }
 
     /**
@@ -125,25 +125,24 @@ class UserDaoTest {
      */
     @Test
     void disableAdminAccountTest() {
-        assertEquals(-1,userDaoTest.disableMembersAccount("AdminBob"));
+        assertEquals(-1, userAddressDaoTest.disableMembersAccount("AdminBob"));
     }
 
     /**
-     * Test to try to a user account that doesnt exist
+     * Test to try to disable a user account that doesnt exist
      * Should return 0 because the user name does not exist
      */
     @Test
     void disableUserAccountTest() {
-        assertEquals(0,userDaoTest.disableMembersAccount("TEST_USER_NAME"));
+        assertEquals(0, userAddressDaoTest.disableMembersAccount("TEST_USER_NAME"));
     }
 
-//    @Test
-//    void disableUserAccountTest2() {
-//        // Should return -2 becasue the account is already disabled
-//        assertEquals(-2,userDaoTest.disableMembersAccount("Sam1"));
-//    }
-
-
-
-
+    /**
+     * Test to try to disable a user account that is already disabled
+     * Should return -2 becasue the account is already disabled
+     */
+    @Test
+   void disableUserAccountTest2() {
+        assertEquals(-2,userAddressDaoTest.disableMembersAccount("Sam1"));
+   }
 }

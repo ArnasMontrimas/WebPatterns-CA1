@@ -1,25 +1,22 @@
 package DataAccessObjects;
 
+import DataAccessObjects.Interfaces.UserAddressDaoInterface;
 import DataTransferObjects.Address;
 import Program.Program;
-import DataAccessObjects.Interfaces.UserDaoInterface;
 import DataTransferObjects.User;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Sam Ponik
  */
-public class UserDao extends Dao implements UserDaoInterface {
+public class UserAddressDao extends Dao implements UserAddressDaoInterface {
 
     /**
      * Initialises a UserDao to access the specified database name
      * @param databaseName The name of the MySQL database to be accessed (this database should
      * be running on localhost and listening on port 3306).
      */
-    public UserDao(String databaseName) {
+    public UserAddressDao(String databaseName) {
         super(databaseName);
     }
 
@@ -193,6 +190,7 @@ public class UserDao extends Dao implements UserDaoInterface {
      * @param email The email for the account
      * @param password The password for the account
      * @param phonenumber The phone number for the account
+     * @param addressID The foreign key to link the user to his address
      */
     @Override
     public boolean registerUser(String username, String password, String email, String phonenumber,int addressID) {
@@ -211,7 +209,7 @@ public class UserDao extends Dao implements UserDaoInterface {
             rowsAffected = ps.executeUpdate();
 
         }catch (SQLException e) {
-           // System.out.println(Program.bookMessages.getString("UserDao_Sql_Users_Insert"));
+            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users_Insert"));
             e.printStackTrace();
         } finally {
             try {
@@ -222,7 +220,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-              //  System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
+                System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
                 e.printStackTrace();
             }
         }
@@ -231,30 +229,40 @@ public class UserDao extends Dao implements UserDaoInterface {
 
     /**
      * Method to insert the users address into the address table and return the users address primary key for the users table
+     * @return The primary key for the address to be used to link the user with the users address
+     * @param firstname The users firstname
+     * @param lastname The users lastname
+     * @param address  The users address
+     * @param city The users city
+     * @param state The state if the user is american null otherwise
+     * @param country The users country
+     * @param postalcode The users postal code
      */
     @Override
-    public int insertAddress(String firstname,String lastname,String address,String city,String state,String country,String postalcode) {
+    public int insertAddress(String firstname,String lastname,String address,String address2,String city,String state,String country,String postalcode) {
         Connection con = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
+        ResultSet rs;
 
         String query;
         int addressID = 0;
 
         try{
-           query = "INSERT INTO address VALUES(NULL,?,?,?,NULL,?,?,?,?)";
+           query = "INSERT INTO address VALUES(NULL,?,?,?,?,?,?,?,?)";
            con = getConnection();
            ps = con.prepareStatement(query);
 
            ps.setString(1,firstname);
            ps.setString(2,lastname);
            ps.setString(3,address);
-           ps.setString(4,city);
-           ps.setString(5,state);
-           ps.setString(6,country);
-           ps.setString(7,postalcode);
+           ps.setString(4,address2);
+           ps.setString(5,city);
+           ps.setString(6,state);
+           ps.setString(7,country);
+           ps.setString(8,postalcode);
 
             ps.executeUpdate();
+            // Get the last key which is associated with the insert to be used to link address/users
             query = "SELECT max(address_id) from address";
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
@@ -264,7 +272,7 @@ public class UserDao extends Dao implements UserDaoInterface {
             }
 
         }catch (SQLException e) {
-
+            System.out.println(Program.bookMessages.getString("UserDao_AddressInsert"));
             e.printStackTrace();
         } finally {
             try {
@@ -275,7 +283,7 @@ public class UserDao extends Dao implements UserDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-
+                System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
                 e.printStackTrace();
             }
         }

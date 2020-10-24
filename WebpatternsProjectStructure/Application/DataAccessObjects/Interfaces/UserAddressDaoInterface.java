@@ -1,11 +1,10 @@
 package DataAccessObjects.Interfaces;
-
-import DataTransferObjects.Address;
 import DataTransferObjects.User;
 
-import java.util.ArrayList;
-
-public interface UserDaoInterface {
+/**
+ * @author Sam Ponik
+ */
+public interface UserAddressDaoInterface {
 
     /**
      * Methods to do with Registering a member.
@@ -14,7 +13,7 @@ public interface UserDaoInterface {
     boolean validateEmail(String email);
     boolean validatePhonenumber(String phonenumber);
     boolean registerUser(String username, String password, String email, String phonenumber,int addressID);
-    int insertAddress(String firstname, String lastname,String address,String city,String state,String country,String postalcode);
+    int insertAddress(String firstname, String lastname,String address,String address2,String city,String state,String country,String postalcode);
 
     /**
      * Checks if the username and password match and if so return the unique user ID the primary key.

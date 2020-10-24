@@ -1,15 +1,10 @@
 package Program;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import DataAccessObjects.*;
-import DataTransferObjects.Address;
 import DataTransferObjects.Book;
 import DataTransferObjects.Loan;
 import DataTransferObjects.User;
@@ -81,7 +76,7 @@ public class Program {
 
     public static void main(String[] args) {
 
-        UserDao userDao = new UserDao(DATABASE);
+        UserAddressDao userAddressDao = new UserAddressDao(DATABASE);
         BookDao bookDao = new BookDao(DATABASE);
         LoanUserBookDao loanUserBookDao = new LoanUserBookDao(DATABASE);
         Scanner userInput = new Scanner(System.in);
@@ -117,7 +112,7 @@ public class Program {
                         if (user == null){
                             System.out.println(globalMessages.getString("main_TypeName"));
                             userName = validateString(userInput,globalMessages);
-                            while (!userDao.validateUsername(userName)){
+                            while (!userAddressDao.validateUsername(userName)){
                                 System.out.println(globalMessages.getString("main_NameExists"));
                                 userName = validateString(userInput,globalMessages);
                             }
@@ -127,24 +122,31 @@ public class Program {
 
                             System.out.println(globalMessages.getString("main_TypeEmail"));
                             email = validateString(userInput,globalMessages);
-                            while (!userDao.validateEmail(email)){
+                            while (!userAddressDao.validateEmail(email)){
                                 System.out.println(globalMessages.getString("main_EmailExists"));
                                 email = validateString(userInput,globalMessages);
                             }
 
                             System.out.println(globalMessages.getString("main_TypePhone"));
                             phoneNumber = validateString(userInput,globalMessages);
-                            while (!userDao.validatePhonenumber(phoneNumber)){
+                            while (!userAddressDao.validatePhonenumber(phoneNumber)){
                                 System.out.println(globalMessages.getString("main_PhoneExists"));
                                 phoneNumber = validateString(userInput,globalMessages);
                             }
-                            System.out.println(globalMessages.getString("main_address"));
+                            System.out.println(globalMessages.getString("main_address")+"\n");
                             System.out.println(globalMessages.getString("main_FirstName"));
                             String firstName = validateString(userInput,globalMessages);
                             System.out.println(globalMessages.getString("main_LastName"));
                             String lastName = validateString(userInput,globalMessages);
                             System.out.println(globalMessages.getString("main_addressDetails"));
                             String address = validateString(userInput,globalMessages);
+                            String address2 = null;
+                            System.out.println(globalMessages.getString("main_extraAddress"));
+                            String moreInfo = validateString(userInput,globalMessages);
+                            if (moreInfo.equalsIgnoreCase("Y")){
+                                System.out.println(globalMessages.getString("main_extraAddressInfo"));
+                                address2 = validateString(userInput,globalMessages);
+                            }
                             System.out.println(globalMessages.getString("main_city"));
                             String city = validateString(userInput,globalMessages);
                             System.out.println(globalMessages.getString("main_country"));
@@ -159,10 +161,10 @@ public class Program {
                             String postalCode = validateString(userInput,globalMessages);
 
                             // Insert the Address Details First
-                            int addressID = userDao.insertAddress(firstName,lastName,address,city,state,country,postalCode);
+                            int addressID = userAddressDao.insertAddress(firstName,lastName,address,address2,city,state,country,postalCode);
 
                             // Finally after all validation insert a member into the table.
-                            userDao.registerUser(userName,passWord,email,phoneNumber,addressID);
+                            userAddressDao.registerUser(userName,passWord,email,phoneNumber,addressID);
                             System.out.println(globalMessages.getString("main_Registered"));
                         } else {
                             System.out.println(globalMessages.getString("main_Default"));
@@ -175,14 +177,14 @@ public class Program {
                             userName = validateString(userInput,globalMessages);
                             System.out.println(globalMessages.getString("main_TypePass"));
                             passWord = validateString(userInput,globalMessages);
-                            userID = userDao.validateLogin(userName,passWord);
+                            userID = userAddressDao.validateLogin(userName,passWord);
                             if (userID == 0){
                                 System.out.println(globalMessages.getString("main_BadLogin"));
                             } else if (userID == -1){
                                 System.out.println(globalMessages.getString("main_BadAccount"));
                                 userID = 0;
                             } else {
-                                user = userDao.getUserByID(userID);
+                                user = userAddressDao.getUserByID(userID);
                                 System.out.printf(globalMessages.getString("main_Welcome"),user.getUsername());
                             }
                         } else {
@@ -334,13 +336,13 @@ public class Program {
                         if (user != null && user.getType().equals("Admin")){
                             System.out.println(globalMessages.getString("main_TypeMember"));
                             String username = validateString(userInput,globalMessages);
-                            if (userDao.disableMembersAccount(username) == 0){
+                            if (userAddressDao.disableMembersAccount(username) == 0){
                                 System.out.println(globalMessages.getString("main_NoUser"));
-                            } else if (userDao.disableMembersAccount(username) == 1){
+                            } else if (userAddressDao.disableMembersAccount(username) == 1){
                                 System.out.println(globalMessages.getString("main_AccDisabled"));
-                            } else if (userDao.disableMembersAccount(username) == -1){
+                            } else if (userAddressDao.disableMembersAccount(username) == -1){
                                 System.out.println(globalMessages.getString("main_AdminDisable"));
-                            } else if (userDao.disableMembersAccount(username) == -2){
+                            } else if (userAddressDao.disableMembersAccount(username) == -2){
                                 System.out.println(globalMessages.getString("main_AlreadyDisabled"));
                             }
                         } else {
