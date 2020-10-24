@@ -1,13 +1,32 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Oct 24, 2020 at 05:05 PM
+-- Server version: 10.4.6-MariaDB
+-- PHP Version: 7.3.9
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-CREATE DATABASE IF NOT EXISTS `dundalk_library` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `dundalk_library`;
+--
+-- Database: `dundalk_library`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `address`
+--
 
 CREATE TABLE `address` (
   `address_id` int(11) NOT NULL,
@@ -21,6 +40,10 @@ CREATE TABLE `address` (
   `postalcode` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `address`
+--
+
 INSERT INTO `address` (`address_id`, `first_name`, `last_name`, `address1`, `address2`, `city`, `state`, `country`, `postalcode`) VALUES
 (1, 'Sam', 'Smith', 'Cavan Town', 'Cavan Green Hills', 'Cavan', NULL, 'Ireland', '141478'),
 (2, 'Arnas', 'Smith', 'Lakepark', NULL, 'NewYork', 'NY', 'America', '154875'),
@@ -29,6 +52,12 @@ INSERT INTO `address` (`address_id`, `first_name`, `last_name`, `address1`, `add
 (5, 'John', 'Smith', '59 Stone Road', NULL, 'Njork', NULL, 'Norway', 'NZ_5487'),
 (6, 'Samuel', 'Smith', '59 Pebble Road', NULL, 'Luhar', NULL, 'Pakistan', 'PK_1478'),
 (18, 'David', 'Smith', '48 Blank ROad', NULL, 'Cavan', NULL, 'Ireland', '874');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `book`
+--
 
 CREATE TABLE `book` (
   `book_id` int(11) NOT NULL,
@@ -41,6 +70,10 @@ CREATE TABLE `book` (
   `quantityInStock` int(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `book`
+--
+
 INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`) VALUES
 (1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 60),
 (2, 'Computing Intro 2', '978-1-60309-025-5', '2.1', 'Introduction to Computing Book 2', 'William Shakespeare', 'Penguin Random House', 50),
@@ -49,20 +82,36 @@ INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_d
 (5, 'Harry Potter', '978-1-60309-029-4', '7.1', 'Fantasy Wizard Book', 'H. P. Lovecraft', 'Macmillan Publishers', 12),
 (6, 'Harry Potter 2', '978-1-60309-089-4', '5.8', 'Fantasy Wizard Book Epic', 'H. P. Lovecraft', 'Macmillan Publishers', 0);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loan`
+--
+
 CREATE TABLE `loan` (
   `loan_id` int(11) NOT NULL,
   `loan_user_id` int(11) NOT NULL,
   `loan_book_id` int(11) NOT NULL,
   `loan_started` datetime NOT NULL,
   `loan_ends` datetime NOT NULL,
-  `loan_is_active` tinyint(1) NOT NULL
+  `loan_returned` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `loan` (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `loan_ends`, `loan_is_active`) VALUES
-(1, 1, 3, '2020-10-06 09:19:10', '2020-10-09 07:00:00', 0),
-(2, 1, 3, '2020-10-12 14:25:19', '2020-10-16 17:00:00', 1),
-(3, 1, 1, '2020-10-12 13:23:00', '2020-10-14 09:19:00', 1),
-(4, 4, 5, '2020-10-14 11:00:00', '2020-10-19 00:00:00', 1);
+--
+-- Dumping data for table `loan`
+--
+
+INSERT INTO `loan` (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `loan_ends`, `loan_returned`) VALUES
+(1, 1, 3, '2020-10-06 09:19:10', '2020-10-09 07:00:00', NULL),
+(2, 1, 3, '2020-10-12 14:25:19', '2020-10-16 17:00:00', NULL),
+(3, 1, 1, '2020-10-12 13:23:00', '2020-10-14 09:19:00', NULL),
+(4, 4, 5, '2020-10-14 11:00:00', '2020-10-19 00:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -76,6 +125,10 @@ CREATE TABLE `users` (
   `address` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `users`
+--
+
 INSERT INTO `users` (`id`, `type`, `username`, `password`, `email`, `phoneNumber`, `dateRegistered`, `activeAccount`, `address`) VALUES
 (1, 'Member', 'Sam', 'sam1', 'sam@gmail.com', '0838568457', '2020-10-12 16:13:03', 1, 1),
 (2, 'Member', 'Arnas', '1', 'arnas@gmail.com', '0869542586', '2020-10-12 16:13:03', 1, 2),
@@ -85,44 +138,84 @@ INSERT INTO `users` (`id`, `type`, `username`, `password`, `email`, `phoneNumber
 (6, 'Member', 'Sam1', '1', 'sam1@gmail.com', '0589653258', '2020-10-12 16:20:54', 0, 6),
 (13, 'Member', 'David', 'Smith', 'david@gmail.com', '2548965874', '2020-10-22 17:41:27', 1, 18);
 
+--
+-- Indexes for dumped tables
+--
 
+--
+-- Indexes for table `address`
+--
 ALTER TABLE `address`
   ADD PRIMARY KEY (`address_id`);
 
+--
+-- Indexes for table `book`
+--
 ALTER TABLE `book`
   ADD PRIMARY KEY (`book_id`),
   ADD UNIQUE KEY `book_name` (`book_name`),
   ADD UNIQUE KEY `book_isbn` (`book_isbn`);
 
+--
+-- Indexes for table `loan`
+--
 ALTER TABLE `loan`
   ADD PRIMARY KEY (`loan_id`),
   ADD KEY `userLoanConstraint` (`loan_user_id`),
   ADD KEY `bookLoanConstraint` (`loan_book_id`);
 
+--
+-- Indexes for table `users`
+--
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `address_fk` (`address`);
 
+--
+-- AUTO_INCREMENT for dumped tables
+--
 
+--
+-- AUTO_INCREMENT for table `address`
+--
 ALTER TABLE `address`
   MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
+--
+-- AUTO_INCREMENT for table `book`
+--
 ALTER TABLE `book`
   MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
+--
+-- AUTO_INCREMENT for table `loan`
+--
 ALTER TABLE `loan`
   MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
+--
+-- AUTO_INCREMENT for table `users`
+--
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
+--
+-- Constraints for dumped tables
+--
 
+--
+-- Constraints for table `loan`
+--
 ALTER TABLE `loan`
   ADD CONSTRAINT `bookLoanConstraint` FOREIGN KEY (`loan_book_id`) REFERENCES `book` (`book_id`),
   ADD CONSTRAINT `userLoanConstraint` FOREIGN KEY (`loan_user_id`) REFERENCES `users` (`id`);
 
+--
+-- Constraints for table `users`
+--
 ALTER TABLE `users`
   ADD CONSTRAINT `address_fk` FOREIGN KEY (`address`) REFERENCES `address` (`address_id`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

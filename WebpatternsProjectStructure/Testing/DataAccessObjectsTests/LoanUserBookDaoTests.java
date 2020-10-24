@@ -106,7 +106,7 @@ class LoanUserBookDaoTests {
         assertEquals(expected, actual);
     }
 
-    //Will do later this takes ageeessss.......
+
     @Test
     void loanBook() {
         System.out.println("");
