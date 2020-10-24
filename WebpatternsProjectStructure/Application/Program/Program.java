@@ -1,5 +1,6 @@
 package Program;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -56,13 +57,14 @@ public class Program {
         String end = simpleDateFormat.format(loanEndDate);
 
         String activeLoan;
-        //Made a change here from '1' to null @Arnas
         if (l.getLoan_returned() == null){
-            activeLoan = "True";
+            activeLoan = globalMessages.getString("main_true");
         } else {
-            activeLoan = "False";
+            activeLoan = globalMessages.getString("main_false");
         }
-        System.out.printf(language.getString("main_displayLoan"),l.getBook_id().getBook_name(),started,end,activeLoan);
+        // Store the fine here if there is any to two decimal places
+        String fine = String.format("%.2f",l.calculateLoanFine());
+        System.out.printf(language.getString("main_displayLoan"),l.getBook_id().getBook_name(),started,end,activeLoan,fine);
     }
 
     private static String validateString(Scanner userInput,ResourceBundle language) {
@@ -248,7 +250,7 @@ public class Program {
                                 } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == 0){
                                     System.out.println(globalMessages.getString("main_Stock"));
                                 }else if (loanUserBookDao.loanBook(bookName,loanDays,user) == -3){
-                                    System.out.println("You cant have more than 5 active loans please return other books to loan this book");
+                                    System.out.println(globalMessages.getString("main_maxLoans"));
                                 }
                             }
                         } else {
