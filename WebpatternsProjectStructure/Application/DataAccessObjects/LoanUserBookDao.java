@@ -61,7 +61,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
                         book,
                         rs.getString("loan_started"),
                         rs.getString("loan_ends"),
-                        rs.getInt("loan_is_active")
+                        rs.getString("loan_returned")
                 ));
             }
 
@@ -105,7 +105,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
                         book,
                         rs.getString("loan_started"),
                         rs.getString("loan_ends"),
-                        rs.getInt("loan_is_active")
+                        rs.getString("loan_returned")
                 ));
             }
 
@@ -123,10 +123,13 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
      * @param name The title of the book to be loaned
      * @param loanDays How many days the user wants the loan to last
      * @param user The user who is loaning a book
-     * @return This method returns a particular number for each error encountered "-2 = Book was attempted to be loaned for longer than 7 days", "-1 = The book was already loaned by the user", "0 = The book in question is out of stock", "2 = The quantity of the book could not be reduced after the loan succeeded", "1 = The loan was successful"
+     * @return This method returns a particular number for each error encountered "-2 = Book was attempted to be loaned for longer than 7 days", "-1 = The book was already loaned by the user", "0 = The book in question is out of stock", "2 = The quantity of the book could not be reduced after the loan succeeded", "1 = The loan was successful", "-3 = The user has maximum loans available for him at any given time"
      */
     @Override
     public int loanBook(String name, int loanDays, User user) {
+        //Check if the user dose not have more than or 5 loans
+        if((allLoansByUserId(user).size()) >= 5) return -3;
+
         //All the date stuff...
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -156,14 +159,13 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("INSERT INTO loan (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `loan_ends`, `loan_is_active`) VALUES (null,?,?,?,?,?)");
+            ps = con.prepareStatement("INSERT INTO loan (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `loan_ends`, `loan_returned`) VALUES (null,?,?,?,?,null)");
             book = getBookByName(name, con);
 
             ps.setInt(1, user.getId());
             ps.setInt(2, book.getBook_id());
             ps.setString(3, startDate);
             ps.setString(4, endDate);
-            ps.setInt(5, 1);
 
             if (loanDays > 0 && loanDays <= 7) {
                 if (!checkIfBookAlreadyLoaned(book.getBook_id(), user.getId())) {
@@ -205,7 +207,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("UPDATE loan SET loan_is_active = 0");
+            ps = con.prepareStatement("UPDATE loan SET loan_returned = current_timestamp();");
             book = getBookByName(name, con);
 
             //Make sure that the book is actually loaned before returning it

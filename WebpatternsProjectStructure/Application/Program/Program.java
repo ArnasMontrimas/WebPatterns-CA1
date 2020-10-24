@@ -56,7 +56,8 @@ public class Program {
         String end = simpleDateFormat.format(loanEndDate);
 
         String activeLoan;
-        if (l.getLoan_is_active() == 1){
+        //Made a change here from '1' to null @Arnas
+        if (l.getLoan_returned() == null){
             activeLoan = "True";
         } else {
             activeLoan = "False";

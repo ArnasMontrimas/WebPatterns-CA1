@@ -10,7 +10,7 @@ public class User {
     private int id;
     private String type;
     private String username;
-    private String password; //Should The password be Hashed? or nah...
+    private String password;
     private String email;
     private String phoneNumber;
     private String dateRegistered;
