@@ -48,7 +48,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            System.out.println(Program.globalMessages.getString("UserDao_Sql_Users"));
             ex.printStackTrace();
         }
         finally{

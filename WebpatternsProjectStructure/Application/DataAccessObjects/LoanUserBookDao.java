@@ -47,7 +47,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         try {
             con = getConnection();
 
-            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_user_id = ? AND loan_is_active = 1");
+            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_user_id = ? AND loan_returned IS NULL");
             ps.setInt(1, id);
 
             rs = ps.executeQuery();
@@ -207,8 +207,10 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("UPDATE loan SET loan_returned = current_timestamp();");
             book = getBookByName(name, con);
+            ps = con.prepareStatement("UPDATE loan SET loan_returned = current_timestamp() WHERE loan_book_id = ? and loan_user_id = ?");
+            ps.setInt(1, book.getBook_id());
+            ps.setInt(2, user.getId());
 
             //Make sure that the book is actually loaned before returning it
             if (checkIfBookAlreadyLoaned(book.getBook_id(), user.getId())) {
@@ -345,7 +347,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
         try {
             con = getConnection();
-            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_book_id = ? AND loan_user_id = ? AND loan_is_active = 1");
+            ps = con.prepareStatement("SELECT * FROM loan WHERE loan_book_id = ? AND loan_user_id = ? AND loan_returned IS NULL");
             ps.setInt(1, book_id);
             ps.setInt(2, user_id);
             rs = ps.executeQuery();

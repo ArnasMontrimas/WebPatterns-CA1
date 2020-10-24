@@ -247,6 +247,8 @@ public class Program {
                                     System.out.println(globalMessages.getString("main_LoanAlready"));
                                 } else if (loanUserBookDao.loanBook(bookName,loanDays,user) == 0){
                                     System.out.println(globalMessages.getString("main_Stock"));
+                                }else if (loanUserBookDao.loanBook(bookName,loanDays,user) == -3){
+                                    System.out.println("You cant have more than 5 active loans please return other books to loan this book");
                                 }
                             }
                         } else {
