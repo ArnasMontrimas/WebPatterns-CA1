@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import Program.Program;
 
 /**
  * This class will interact with the Loan Table in db
@@ -66,7 +67,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             }
 
         } catch (SQLException e) {
-            System.err.println("Exception Occurred: " + e.getMessage());
+            System.err.println(Program.globalMessages.getString("GenericMessage") + e.getMessage());
         } finally {
             closeConnections(con, ps, rs);
         }
@@ -110,13 +111,12 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             }
 
         } catch (SQLException e) {
-            System.err.println("Exception Occurred: " + e.getMessage());
+            System.err.println(Program.globalMessages.getString("GenericMessage") + e.getMessage());
         } finally {
             closeConnections(con, ps, rs);
         }
         return loans;
     }
-
 
     /**
      * This method loans a book to a particular user
@@ -174,14 +174,14 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
                         if (rs > 0) {
                             if (bookDao.removeCopies(book.getBook_id(), 1)) result = 1; //Book has been loaned
                             else result = 2; //Book quantity could not be reduced
-                        } else System.err.println("Something went wrong book could not be loaned");
+                        } else System.err.println(Program.globalMessages.getString("LoanUserBookDao_SQL_ResultSet"));
                     } else result = 0; //The book is out of stock
                 } else result = -1; //The book is already loaned by that user
             } else result = -2; //Books cant be loaned for longer than 7 days
 
 
         } catch (SQLException ex) {
-            System.err.println("Exception Occurred: " + ex.getMessage());
+            System.err.println(Program.globalMessages.getString("GenericMessage") + ex.getMessage());
             ex.printStackTrace();
         } finally {
             closeConnections(con, ps, null);
@@ -220,7 +220,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
 
         } catch (SQLException ex) {
-            System.err.println("Exception Occurred: " + ex.getMessage());
+            System.err.println(Program.globalMessages.getString("GenericMessage") + ex.getMessage());
             ex.printStackTrace();
         }
 
@@ -318,7 +318,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             try {
                 rs.close();
             } catch (SQLException ex) {
-                System.err.println("Exception when closing result set");
+                System.err.println(Program.globalMessages.getString("LoanUserBookDao_Closing_ResultSet"));
                 ex.printStackTrace();
             }
         }
@@ -326,7 +326,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             try {
                 ps.close();
             } catch (SQLException ex) {
-                System.err.println("Exception when closing prepared statement");
+                System.err.println(Program.globalMessages.getString("LoanUserBookDao_Closing_PreparedStatement"));
                 ex.printStackTrace();
             }
         }
@@ -355,7 +355,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
             loaned = rs.next();
 
         } catch (SQLException ex) {
-            System.err.println("Exception Occurred: " + ex.getMessage());
+            System.err.println(Program.globalMessages.getString("GenericMessage") + ex.getMessage());
             ex.printStackTrace();
         } finally {
             closeConnections(con, ps, rs);
