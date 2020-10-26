@@ -43,11 +43,18 @@ CREATE TABLE `book` (
 
 INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`) VALUES
 (1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 60),
-(2, 'Computing Intro 2', '978-1-60309-025-5', '2.1', 'Introduction to Computing Book 2', 'William Shakespeare', 'Penguin Random House', 50),
+(2, 'Computing Intro 2', '978-1-60309-025-5', '2.1', 'Introduction to Computing Book 2', 'William Shakespeare', 'Penguin Random House', 49),
 (3, 'Biology Intro', '678-1-60309-025-4', '3.1', 'Biology Intro', 'Emily Dickinson', 'HarperCollins', 57),
-(4, 'Biology Intro 2', '778-1-60309-025-4', '4.1', 'Biology Intro 2', 'Emily Dickinson', 'HarperCollins', 47),
-(5, 'Harry Potter', '978-1-60309-029-4', '7.1', 'Fantasy Wizard Book', 'H. P. Lovecraft', 'Macmillan Publishers', 12),
-(6, 'Harry Potter 2', '978-1-60309-089-4', '5.8', 'Fantasy Wizard Book Epic', 'H. P. Lovecraft', 'Macmillan Publishers', 0);
+(4, 'Biology Intro 2', '778-1-60309-025-4', '4.1', 'Biology Intro 2', 'Emily Dickinson', 'HarperCollins', 46),
+(5, 'Harry Potter', '978-1-60309-029-4', '7.1', 'Fantasy Wizard Book', 'H. P. Lovecraft', 'Macmillan Publishers', 15),
+(6, 'Harry Potter 2', '978-1-60309-089-4', '5.8', 'Fantasy Wizard Book Epic', 'H. P. Lovecraft', 'Macmillan Publishers', 0),
+(7, 'Computing Intro 4', '678-1-60209-025-4', '4.5', 'Computing Book 4', 'William Shakespeare', 'HarperCollins', 48),
+(8, 'Computing Java', '678-1-60309-925-4', '9.4', 'Java Intro', 'William Shakespeare', 'Macmillan Publishers', 47),
+(9, 'Maths Intro', '678-1-60709-025-4', '4.7', 'Book for beginners for learning maths', 'Emily Dickinson', 'Penguin Random House', 9),
+(10, 'Introduction to Music', '778-1-60307-025-4', '1.0', 'Book for beginners for learning music', 'Emily Dickinson', 'Macmillan Publishers', 47),
+(11, 'Intro To French', '678-1-60389-025-4', '2.4', 'Beginners book for learning french', 'H. P. Lovecraft', 'Penguin Random House', 8),
+(12, 'Intro To German', '678-1-67389-025-4', '2.3', 'Beginners book for learning german', 'H. P. Lovecraft', 'HarperCollins', 14),
+(17, 'Intro To Science', '748-9856-9999', '1.0', 'Book About Science', 'David Smith', 'Macmillian', 74);
 
 CREATE TABLE `loan` (
   `loan_id` int(11) NOT NULL,
@@ -55,14 +62,16 @@ CREATE TABLE `loan` (
   `loan_book_id` int(11) NOT NULL,
   `loan_started` datetime NOT NULL,
   `loan_ends` datetime NOT NULL,
-  `loan_is_active` tinyint(1) NOT NULL
+  `loan_returned` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `loan` (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `loan_ends`, `loan_is_active`) VALUES
-(1, 1, 3, '2020-10-06 09:19:10', '2020-10-09 07:00:00', 0),
-(2, 1, 3, '2020-10-12 14:25:19', '2020-10-16 17:00:00', 1),
-(3, 1, 1, '2020-10-12 13:23:00', '2020-10-14 09:19:00', 1),
-(4, 4, 5, '2020-10-14 11:00:00', '2020-10-19 00:00:00', 1);
+INSERT INTO `loan` (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `loan_ends`, `loan_returned`) VALUES
+(1, 1, 3, '2020-10-06 09:19:10', '2020-10-09 07:00:00', NULL),
+(3, 1, 1, '2020-10-12 13:23:00', '2020-10-14 09:19:00', NULL),
+(4, 4, 5, '2020-10-14 11:00:00', '2020-10-19 00:00:00', NULL),
+(5, 1, 2, '2020-10-24 18:19:22', '2020-10-28 18:19:22', NULL),
+(6, 1, 4, '2020-10-24 18:19:47', '2020-10-27 18:19:47', NULL),
+(7, 1, 5, '2020-10-24 18:20:03', '2020-10-28 18:20:03', '2020-10-24 18:48:30');
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -105,16 +114,16 @@ ALTER TABLE `users`
 
 
 ALTER TABLE `address`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 ALTER TABLE `book`
-  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 ALTER TABLE `loan`
-  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 
 ALTER TABLE `loan`

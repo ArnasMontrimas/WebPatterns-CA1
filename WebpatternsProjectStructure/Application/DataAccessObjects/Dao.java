@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 /**
  * @author grallm
- * @author Sam2288
- * @author ArnasMontrimas
+ * @author Sam Ponik
+ * @author Arnas Montrimas
  *
  * Principal DAO connecting to the MySQL DB with JDBC
  */

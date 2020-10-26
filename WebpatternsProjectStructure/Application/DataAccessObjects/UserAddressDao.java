@@ -40,7 +40,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             rs = ps.executeQuery();
 
             if (rs.next()){
-                // There is a user with that same username but returns true for Sam,sam so need to check again
+                // There is a user with that same username
                 String name = rs.getString("username");
                 if (name.equals(username)){
                     validUsername = false;
@@ -56,7 +56,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
+                    System.out.println(Program.globalMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -64,7 +64,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
+                    System.out.println(Program.globalMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -95,6 +95,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             rs = ps.executeQuery();
 
             if (rs.next()){
+                // Same email checking here
                 String e = rs.getString("email");
                 if (e.equals(email)){
                     validEmail = false;
@@ -102,7 +103,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            System.out.println(Program.globalMessages.getString("UserDao_Sql_Users"));
             ex.printStackTrace();
         }
         finally{
@@ -110,7 +111,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
+                    System.out.println(Program.globalMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -118,7 +119,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
+                    System.out.println(Program.globalMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -149,6 +150,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             rs = ps.executeQuery();
 
             if (rs.next()){
+                // Same phone checking here
                 String phoneNum = rs.getString("phoneNumber");
                 if (phoneNum.equals(phonenumber)){
                     validPhone = false;
@@ -156,7 +158,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            System.out.println(Program.globalMessages.getString("UserDao_Sql_Users"));
             ex.printStackTrace();
         }
         finally{
@@ -164,7 +166,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
+                    System.out.println(Program.globalMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -172,7 +174,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
+                    System.out.println(Program.globalMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -200,6 +202,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
 
         try{
             con = getConnection();
+            // Simple insert here
             ps = con.prepareStatement("INSERT into users VALUES(NULL,'Member',?,?,?,?,current_timestamp(),true,?)");
             ps.setString(1,username);
             ps.setString(2,password);
@@ -209,7 +212,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             rowsAffected = ps.executeUpdate();
 
         }catch (SQLException e) {
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users_Insert"));
+            System.out.println(Program.globalMessages.getString("UserDao_Sql_Users_Insert"));
             e.printStackTrace();
         } finally {
             try {
@@ -220,7 +223,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
+                System.out.println(Program.globalMessages.getString("UserDao_Sql_Finally"));
                 e.printStackTrace();
             }
         }
@@ -262,7 +265,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
            ps.setString(8,postalcode);
 
             ps.executeUpdate();
-            // Get the last key which is associated with the insert to be used to link address/users
+            // Get the last primary key which is associated with the user insert to be used to link address/users
             query = "SELECT max(address_id) from address";
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
@@ -272,7 +275,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             }
 
         }catch (SQLException e) {
-            System.out.println(Program.bookMessages.getString("UserDao_AddressInsert"));
+            System.out.println(Program.globalMessages.getString("UserDao_AddressInsert"));
             e.printStackTrace();
         } finally {
             try {
@@ -283,7 +286,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println(Program.bookMessages.getString("UserDao_Sql_Finally"));
+                System.out.println(Program.globalMessages.getString("UserDao_Sql_Finally"));
                 e.printStackTrace();
             }
         }
@@ -310,17 +313,21 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             ps.setString(2,password);
             rs = ps.executeQuery();
 
+            // If the user name and password match
             if (rs.next()){
+                // Check if the account is active and valid so basically not disabled by admin
                 boolean validAccount = rs.getBoolean("activeAccount");
                 if (validAccount){
+                    // If its active get its primary key ID
                     ID = rs.getInt("id");
                 } else {
+                    // Disabled by admin
                     ID = -1;
                 }
             }
         }
         catch(SQLException ex){
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            System.out.println(Program.globalMessages.getString("UserDao_Sql_Users"));
             ex.printStackTrace();
         }
         finally{
@@ -328,7 +335,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
+                    System.out.println(Program.globalMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -336,7 +343,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
+                    System.out.println(Program.globalMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -363,6 +370,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
         int addressID = 0;
         try{
             con = getConnection();
+            // Get the foreign key in the users table
             query = "SELECT address FROM users WHERE id = ?";
             ps = con.prepareStatement(query);
             ps.setInt(1,userID);
@@ -371,11 +379,13 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 addressID = rs.getInt("address");
             }
 
+            // Get all address info based on that foreign key which will be needed to create address object
             query = "SELECT * FROM address WHERE address_id = ?";
             ps = con.prepareStatement(query);
             ps.setInt(1,addressID);
             rs = ps.executeQuery();
 
+            // Creating address object here
             if (rs.next()){
                 address = new Address(
                 rs.getInt("address_id"),
@@ -394,6 +404,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             ps.setInt(1,userID);
             rs = ps.executeQuery();
 
+            // Now finally create the user object which also contains the address object
             if (rs.next()){
                 user = new User(userID,
                         rs.getString("type"),
@@ -408,7 +419,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            System.out.println(Program.globalMessages.getString("UserDao_Sql_Users"));
             ex.printStackTrace();
         }
         finally{
@@ -416,7 +427,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
+                    System.out.println(Program.globalMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -424,7 +435,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
+                    System.out.println(Program.globalMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
@@ -474,7 +485,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
             }
         }
         catch(SQLException ex){
-            System.out.println(Program.bookMessages.getString("UserDao_Sql_Users"));
+            System.out.println(Program.globalMessages.getString("UserDao_Sql_Users"));
             ex.printStackTrace();
         }
         finally{
@@ -482,7 +493,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     rs.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_ResultSet"));
+                    System.out.println(Program.globalMessages.getString("UserDao_ResultSet"));
                     ex.printStackTrace();
                 }
             }
@@ -490,7 +501,7 @@ public class UserAddressDao extends Dao implements UserAddressDaoInterface {
                 try {
                     ps.close();
                 } catch (SQLException ex) {
-                    System.out.println(Program.bookMessages.getString("UserDao_PreparedSt"));
+                    System.out.println(Program.globalMessages.getString("UserDao_PreparedSt"));
                     ex.printStackTrace();
                 }
             }
