@@ -50,7 +50,7 @@ public class Program {
      */
     private static void displayBook(Book b) {
         // Display Book Info
-        System.out.printf(bookMessages.getString("main_displayBook"),b.getBook_name(),b.getBook_isbn(),b.getBook_edition(),b.getBook_description(),b.getAuthor(),b.getPublisher(),(b.getQuantityInStock() > 0 ? "Yes" : "No"));
+        System.out.printf(bookMessages.getString("main_displayBook"),b.getBook_name(),b.getBook_isbn(),b.getBook_edition(),b.getBook_description(),b.getAuthor(),b.getPublisher(),(b.getQuantityInStock() > 0 ? globalMessages.getString("main_true") : globalMessages.getString("main_false")));
     }
 
     /**
