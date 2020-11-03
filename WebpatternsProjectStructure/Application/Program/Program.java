@@ -59,6 +59,7 @@ public class Program {
      */
     private static void displayLoan(Loan l) {
 
+        // More user friendly pattern for internalization
         String pattern = "E, MMM dd yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat =new SimpleDateFormat(pattern,chosenLocale);
         Date loanStartedDate = null;
@@ -73,6 +74,7 @@ public class Program {
         String started = simpleDateFormat.format(loanStartedDate);
         String end = simpleDateFormat.format(loanEndDate);
 
+        // If the loan is active
         String activeLoan;
         if (l.getLoan_returned() == null){
             activeLoan = globalMessages.getString("main_true");
@@ -98,6 +100,25 @@ public class Program {
         return var;
     }
 
+    /**
+     * This method validates int input from the user
+     * @param userInput The scanner input
+     */
+    private static int validateInt(Scanner userInput) {
+        int var = 0;
+        boolean stop = true;
+        while (stop){
+            try {
+                var = Integer.parseInt(userInput.nextLine());
+                stop = false;
+            } catch (NumberFormatException e){
+                System.out.println("Not a integer try again");
+            }
+        }
+
+        return var;
+    }
+
     public static void main(String[] args) {
 
         UserAddressDao userAddressDao = new UserAddressDao(DATABASE);
@@ -108,6 +129,7 @@ public class Program {
 
         System.out.println(globalMessages.getString("main_dundalk"));
 
+        // Once the user logs in the user object is set keeping the session
         User user = null;
         int userID = 0;
         String userName;
@@ -215,8 +237,8 @@ public class Program {
                 System.out.println(globalMessages.getString("main_NoBookByName"));
             } else {
                 System.out.println(globalMessages.getString("main_Quantity"));
-                String quantity = validateString(userInput);
-                if (bookDao.removeCopies(book.getBook_id(),Integer.parseInt(quantity))){
+                int quantity = validateInt(userInput);
+                if (bookDao.removeCopies(book.getBook_id(),quantity)){
                     System.out.println(globalMessages.getString("main_QtyDec"));
                 } else {
                     System.out.println(globalMessages.getString("main_QtyDenied"));
@@ -255,9 +277,8 @@ public class Program {
             } else {
                 // Book exists so ask for quantity and add it
                 System.out.println(globalMessages.getString("main_Quantity"));
-                String quantity = validateString(userInput);
-                // TODO: 19/10/2020 just string validation needed here for int
-                if (bookDao.addCopies(book.getBook_id(),Integer.parseInt(quantity))){
+                int quantity = validateInt(userInput);
+                if (bookDao.addCopies(book.getBook_id(),quantity)){
                     System.out.println(globalMessages.getString("main_QtyInc"));
                 } else {
                     System.out.println(globalMessages.getString("main_QtyDenied"));
@@ -287,9 +308,8 @@ public class Program {
                 System.out.println(globalMessages.getString("main_Publisher"));
                 String publisher = validateString(userInput);
                 System.out.println(globalMessages.getString("main_BookQuantity"));
-                // TODO: 15/10/2020 // VALIDATION HERE NEEDED not only for string but for 0 quantity
-                String quantity = validateString(userInput);
-                bookDao.addBook(title,ISBN,edition,description,author,publisher,Integer.parseInt(quantity));
+                int quantity = validateInt(userInput);
+                bookDao.addBook(title,ISBN,edition,description,author,publisher,quantity);
                 System.out.println(globalMessages.getString("main_BookAdded"));
             }
         } else {
@@ -325,9 +345,7 @@ public class Program {
                 System.out.println(globalMessages.getString("main_NoBook"));
             } else {
                 System.out.println(globalMessages.getString("main_LoanDays"));
-                // TODO: 21/10/2020 validation needed for string here like this or the scanner buffer will jump to next line
-                int loanDays = Integer.parseInt(validateString(userInput));
-
+                int loanDays = validateInt(userInput);
                 if(loanUserBookDao.loanBook(bookName,loanDays, user) == 1){
                     System.out.println(globalMessages.getString("main_Loaned"));
                 } else if (loanUserBookDao.loanBook(bookName,loanDays, user) == -2){
