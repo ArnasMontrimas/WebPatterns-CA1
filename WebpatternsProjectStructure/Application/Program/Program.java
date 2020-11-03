@@ -112,7 +112,7 @@ public class Program {
                 var = Integer.parseInt(userInput.nextLine());
                 stop = false;
             } catch (NumberFormatException e){
-                System.out.println("Not a integer try again");
+                System.out.println(globalMessages.getString("main_BadInteger"));
             }
         }
 
