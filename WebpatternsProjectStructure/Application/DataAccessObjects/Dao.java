@@ -3,7 +3,7 @@ package DataAccessObjects;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+import Program.Program;
 /**
  * @author grallm
  * @author Sam Ponik
@@ -31,10 +31,10 @@ public class Dao
             Class.forName(driver);
             con = DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException ex1) {
-            System.out.println("Failed to find driver class " + ex1.getMessage());
+            System.out.println(Program.globalMessages.getString("dao_failedDriver") + ex1.getMessage());
             System.exit(1);
         } catch (SQLException ex2) {
-            System.out.println("Connection failed " + ex2.getMessage());
+            System.out.println(Program.globalMessages.getString("dao_ConFailed") + ex2.getMessage());
         }
         return con;
     }
@@ -47,7 +47,7 @@ public class Dao
                 con = null;
             }
         } catch (SQLException e) {
-            System.out.println("Failed to free connection: " + e.getMessage());
+            System.out.println(Program.globalMessages.getString("dao_FreeConFailed") + e.getMessage());
             System.exit(1);
         }
     }
