@@ -2,6 +2,7 @@ package DataAccessObjects;
 
 import DataAccessObjects.Interfaces.BookDaoInterface;
 import DataTransferObjects.Book;
+import Program.Program;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,7 +52,8 @@ public class BookDao extends Dao implements BookDaoInterface {
                 );
             }
         }catch (SQLException e) {
-            System.out.println("Exception BookDao.findById(): " + e.getMessage());
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_find"));
+            e.printStackTrace();
         } finally {
             closeDaoConnection(con, ps, rs);
         }
@@ -92,7 +94,8 @@ public class BookDao extends Dao implements BookDaoInterface {
                 );
             }
         }catch (SQLException e) {
-            System.out.println("Exception BookDao.findByName(): " + e.getMessage());
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_find"));
+            e.printStackTrace();
         } finally {
             closeDaoConnection(con, ps, rs);
         }
@@ -116,12 +119,6 @@ public class BookDao extends Dao implements BookDaoInterface {
         PreparedStatement ps = null;
         int rowsAffected = 0;
 
-        // Not needed here because checking in CLI
-      //  if (this.findByName(book_name) != null) {
-        //    System.out.println("Book with this Name already exists");
-        //    return false;
-     //   }
-
         try {
             con = getConnection();
 
@@ -139,7 +136,7 @@ public class BookDao extends Dao implements BookDaoInterface {
 
             rowsAffected = ps.executeUpdate();
         } catch (Exception e) {
-            System.out.println("Exception BookDao.addBook(): " + e.getMessage());
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_add"));
             e.printStackTrace();
         } finally {
             try {
@@ -150,12 +147,13 @@ public class BookDao extends Dao implements BookDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println("Exception BookDao.addBook(): " + e.getMessage());
+                System.err.println(Program.globalMessages.getString("UserDao_PreparedSt"));
+                e.printStackTrace();
             }
         }
 
         if (rowsAffected != 1) {
-            System.out.println("Book couldn't be added");
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_add"));
         }
         return rowsAffected == 1;
     }
@@ -188,10 +186,8 @@ public class BookDao extends Dao implements BookDaoInterface {
             ps.setInt(1, book_id);
 
             rowsAffected = ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Exception BookDao.removeBook(): " + e.getMessage());
         } catch( Exception e ) {
-            System.out.println("Exception BookDao.removeBook(): " + e.getMessage());
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_remove"));
             e.printStackTrace();
         } finally {
             try {
@@ -202,12 +198,13 @@ public class BookDao extends Dao implements BookDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println("Exception BookDao.removeBook(): " + e.getMessage());
+                System.err.println(Program.globalMessages.getString("UserDao_PreparedSt"));
+                e.printStackTrace();
             }
         }
 
         if (rowsAffected != 1) {
-            System.out.println("Book couldn't be removed");
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_remove"));
         }
         return rowsAffected == 1;
     }
@@ -243,7 +240,7 @@ public class BookDao extends Dao implements BookDaoInterface {
                 ));
             }
         }catch (SQLException e) {
-            System.out.println("Exception BookDao.findById(): " + e.getMessage());
+            System.out.println(Program.bookMessages.getString("BookDao_Sql_getAll"));
         } finally {
             closeDaoConnection(con, ps, rs);
         }
@@ -262,7 +259,7 @@ public class BookDao extends Dao implements BookDaoInterface {
                 freeConnection(con);
             }
         } catch (SQLException e) {
-            System.out.println("Exception BookDao.findById(): " + e.getMessage());
+            System.err.println(Program.globalMessages.getString("UserDao_PreparedSt"));
         }
     }
 
@@ -290,10 +287,8 @@ public class BookDao extends Dao implements BookDaoInterface {
             ps.setInt(2, book_id);
 
             rowsAffected = ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Exception BookDao.addCopies(): " + e.getMessage());
         } catch( Exception e ) {
-            System.out.println("Exception BookDao.addCopies(): " + e.getMessage());
+            System.out.println(Program.bookMessages.getString("BookDao_Sql_addCopies"));
             e.printStackTrace();
         } finally {
             try {
@@ -304,12 +299,12 @@ public class BookDao extends Dao implements BookDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println("Exception BookDao.addCopies(): " + e.getMessage());
+                System.err.println(Program.globalMessages.getString("UserDao_PreparedSt"));
             }
         }
 
         if (rowsAffected != 1) {
-            System.out.println("Copies couldn't be added");
+            System.out.println(Program.bookMessages.getString("BookDao_Sql_addCopies"));
         }
         return rowsAffected == 1;
     }
@@ -338,10 +333,8 @@ public class BookDao extends Dao implements BookDaoInterface {
             ps.setInt(2, book_id);
 
             rowsAffected = ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Exception BookDao.removeCopies(): " + e.getMessage());
         } catch( Exception e ) {
-            System.out.println("Exception BookDao.removeCopies(): " + e.getMessage());
+            System.out.println(Program.bookMessages.getString("BookDao_Sql_removeCopies"));
             e.printStackTrace();
         } finally {
             try {
@@ -352,12 +345,12 @@ public class BookDao extends Dao implements BookDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println("Exception BookDao.removeCopies(): " + e.getMessage());
+                System.out.println(Program.globalMessages.getString("Userdao_sql_"));
             }
         }
 
         if (rowsAffected != 1) {
-            System.out.println("Copies couldn't be removed");
+            System.out.println(Program.bookMessages.getString("BookDao_Sql_removeCopies"));
         }
         return rowsAffected == 1;
     }
