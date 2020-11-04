@@ -137,7 +137,7 @@ public class BookDao extends Dao implements BookDaoInterface {
             rowsAffected = ps.executeUpdate();
         } catch (Exception e) {
             System.err.println(Program.bookMessages.getString("BookDao_Sql_add"));
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             try {
                 if (ps != null) {
@@ -240,7 +240,7 @@ public class BookDao extends Dao implements BookDaoInterface {
                 ));
             }
         }catch (SQLException e) {
-            System.out.println(Program.bookMessages.getString("BookDao_Sql_getAll"));
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_getAll"));
         } finally {
             closeDaoConnection(con, ps, rs);
         }
@@ -288,7 +288,7 @@ public class BookDao extends Dao implements BookDaoInterface {
 
             rowsAffected = ps.executeUpdate();
         } catch( Exception e ) {
-            System.out.println(Program.bookMessages.getString("BookDao_Sql_addCopies"));
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_addCopies"));
             e.printStackTrace();
         } finally {
             try {
@@ -304,7 +304,7 @@ public class BookDao extends Dao implements BookDaoInterface {
         }
 
         if (rowsAffected != 1) {
-            System.out.println(Program.bookMessages.getString("BookDao_Sql_addCopies"));
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_addCopies"));
         }
         return rowsAffected == 1;
     }
@@ -334,7 +334,7 @@ public class BookDao extends Dao implements BookDaoInterface {
 
             rowsAffected = ps.executeUpdate();
         } catch( Exception e ) {
-            System.out.println(Program.bookMessages.getString("BookDao_Sql_removeCopies"));
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_removeCopies"));
             e.printStackTrace();
         } finally {
             try {
@@ -345,12 +345,12 @@ public class BookDao extends Dao implements BookDaoInterface {
                     freeConnection(con);
                 }
             } catch (SQLException e) {
-                System.out.println(Program.globalMessages.getString("Userdao_sql_"));
+                System.err.println(Program.globalMessages.getString("Userdao_sql_"));
             }
         }
 
         if (rowsAffected != 1) {
-            System.out.println(Program.bookMessages.getString("BookDao_Sql_removeCopies"));
+            System.err.println(Program.bookMessages.getString("BookDao_Sql_removeCopies"));
         }
         return rowsAffected == 1;
     }
