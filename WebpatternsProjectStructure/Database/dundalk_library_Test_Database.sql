@@ -45,7 +45,7 @@ CREATE TABLE `book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`) VALUES
-(1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 56),
+(1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 60),
 (2, 'Computing Intro 2', '978-1-60309-025-5', '2.1', 'Introduction to Computing Book 2', 'William Shakespeare', 'Penguin Random House', 49),
 (3, 'Biology Intro', '678-1-60309-025-4', '3.1', 'Biology Intro', 'Emily Dickinson', 'HarperCollins', 57),
 (4, 'Biology Intro 2', '778-1-60309-025-4', '4.1', 'Biology Intro 2', 'Emily Dickinson', 'HarperCollins', 46),
@@ -55,8 +55,8 @@ INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_d
 (8, 'Computing Java', '678-1-60309-925-4', '9.4', 'Java Intro', 'William Shakespeare', 'Macmillan Publishers', 47),
 (9, 'Maths Intro', '678-1-60709-025-4', '4.7', 'Book for beginners for learning maths', 'Emily Dickinson', 'Penguin Random House', 9),
 (10, 'Introduction to Music', '778-1-60307-025-4', '1.0', 'Book for beginners for learning music', 'Emily Dickinson', 'Macmillan Publishers', 47),
-(11, 'Intro To French', '678-1-60389-025-4', '2.4', 'Beginners book for learning french', 'H. P. Lovecraft', 'Penguin Random House', 7),
-(12, 'Intro To German', '678-1-67389-025-4', '2.3', 'Beginners book for learning german', 'H. P. Lovecraft', 'HarperCollins', 13),
+(11, 'Intro To French', '678-1-60389-025-4', '2.4', 'Beginners book for learning french', 'H. P. Lovecraft', 'Penguin Random House', 8),
+(12, 'Intro To German', '678-1-67389-025-4', '2.3', 'Beginners book for learning german', 'H. P. Lovecraft', 'HarperCollins', 14),
 (17, 'Intro To Science', '748-9856-9999', '1.0', 'Book About Science', 'David Smith', 'Macmillian', 74);
 
 CREATE TABLE `loan` (
