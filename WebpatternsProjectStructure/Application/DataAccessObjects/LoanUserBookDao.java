@@ -123,7 +123,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
      * @param name The title of the book to be loaned
      * @param loanDays How many days the user wants the loan to last
      * @param user The user who is loaning a book
-     * @return This method returns a particular number for each error encountered "-2 = Book was attempted to be loaned for longer than 7 days", "-1 = The book was already loaned by the user", "0 = The book in question is out of stock", "2 = The quantity of the book could not be reduced after the loan succeeded", "1 = The loan was successful", "-3 = The user has maximum loans available for him at any given time"
+     * @return This method returns a particular number for each error encountered "-2 = Book was attempted to be loaned for longer than 7 days", "-1 = The book was already loaned by the user", "0 = The book in question is out of stock", "2 = The quantity of the book could not be reduced after the loan succeeded", "1 = The loan was successful", "-3 = The user has maximum loans available for him at any given time", "-4 = The user can not loan a book that does not exist"
      */
     @Override
     public int loanBook(String name, int loanDays, User user) {
@@ -160,7 +160,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
         try {
             con = getConnection();
             ps = con.prepareStatement("INSERT INTO loan (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `loan_ends`, `loan_returned`) VALUES (null,?,?,?,?,null)");
-            book = getBookByName(name, con);
+            if((book = getBookByName(name, con)) == null) return -4;
 
             ps.setInt(1, user.getId());
             ps.setInt(2, book.getBook_id());
@@ -207,7 +207,7 @@ public class LoanUserBookDao extends Dao implements LoanUserBookDaoInterface {
 
         try {
             con = getConnection();
-            book = getBookByName(name, con);
+            if((book = getBookByName(name, con)) == null) return false;
             ps = con.prepareStatement("UPDATE loan SET loan_returned = current_timestamp() WHERE loan_book_id = ? and loan_user_id = ?");
             ps.setInt(1, book.getBook_id());
             ps.setInt(2, user.getId());
