@@ -189,7 +189,7 @@ class LoanUserBookDaoTests {
         Address a = new Address(2,"Arnas","Smith","Lakepark",null,"New York","NY","America","154875");
         User u = new User(2,"Member","Arnas","1","arnas@gmail.com","0869542586","2020-10-12 17:13:03",true,a);
 
-        Book book3 = new Book(11,"Intro To French","678-1-60389-025-4","2.4","Beginners book for learning french","H.P.Lovecraft","Penguin Random House", 0);
+        Book book3 = new Book(6, "Harry Potter 2", "978-1-60309-089-4", "5.8", "Fantasy Wizard Book Epic", "H. P. Lovecraft", "Macmillan Publishers", 0);
 
         int expected = 0;
         int actual = dao.loanBook(book3.getBook_name(),5,u);
