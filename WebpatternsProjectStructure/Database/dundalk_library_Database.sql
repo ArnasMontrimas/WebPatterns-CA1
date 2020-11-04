@@ -6,8 +6,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-CREATE DATABASE IF NOT EXISTS `dundalk_library_test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `dundalk_library_test`;
+CREATE DATABASE IF NOT EXISTS `dundalk_library` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `dundalk_library`;
 
 CREATE TABLE `address` (
   `address_id` int(11) NOT NULL,
@@ -28,7 +28,10 @@ INSERT INTO `address` (`address_id`, `first_name`, `last_name`, `address1`, `add
 (4, 'Malo', 'Smith', '55 Lake Road', NULL, 'Paris', NULL, 'France', '147859'),
 (5, 'John', 'Smith', '59 Stone Road', NULL, 'Njork', NULL, 'Norway', 'NZ_5487'),
 (6, 'Samuel', 'Smith', '59 Pebble Road', NULL, 'Luhar', NULL, 'Pakistan', 'PK_1478'),
-(18, 'David', 'Smith', '48 Blank ROad', NULL, 'Cavan', NULL, 'Ireland', '874');
+(18, 'David', 'Smith', '48 Blank ROad', NULL, 'Cavan', NULL, 'Ireland', '874'),
+(20, 'Micheal', 'Smith', '48 Old Road', NULL, 'Cavan', NULL, 'Ireland', 'HK-875'),
+(21, 'Mary', 'Smith', '42 Branch Road', NULL, 'Chicago', 'CH', 'America', 'CH-987'),
+(22, 'Anna', 'Smith', '58 Apartment Complex', 'Apartment Number 7', 'Dublin', NULL, 'Ireland', 'IR-987');
 
 CREATE TABLE `book` (
   `book_id` int(11) NOT NULL,
@@ -42,7 +45,7 @@ CREATE TABLE `book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_description`, `author`, `publisher`, `quantityInStock`) VALUES
-(1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 60),
+(1, 'Computing Intro', '978-1-60309-025-4', '1.1', 'Introduction to Computing Book ', 'William Shakespeare', 'Penguin Random House', 56),
 (2, 'Computing Intro 2', '978-1-60309-025-5', '2.1', 'Introduction to Computing Book 2', 'William Shakespeare', 'Penguin Random House', 49),
 (3, 'Biology Intro', '678-1-60309-025-4', '3.1', 'Biology Intro', 'Emily Dickinson', 'HarperCollins', 57),
 (4, 'Biology Intro 2', '778-1-60309-025-4', '4.1', 'Biology Intro 2', 'Emily Dickinson', 'HarperCollins', 46),
@@ -52,8 +55,8 @@ INSERT INTO `book` (`book_id`, `book_name`, `book_isbn`, `book_edition`, `book_d
 (8, 'Computing Java', '678-1-60309-925-4', '9.4', 'Java Intro', 'William Shakespeare', 'Macmillan Publishers', 47),
 (9, 'Maths Intro', '678-1-60709-025-4', '4.7', 'Book for beginners for learning maths', 'Emily Dickinson', 'Penguin Random House', 9),
 (10, 'Introduction to Music', '778-1-60307-025-4', '1.0', 'Book for beginners for learning music', 'Emily Dickinson', 'Macmillan Publishers', 47),
-(11, 'Intro To French', '678-1-60389-025-4', '2.4', 'Beginners book for learning french', 'H. P. Lovecraft', 'Penguin Random House', 8),
-(12, 'Intro To German', '678-1-67389-025-4', '2.3', 'Beginners book for learning german', 'H. P. Lovecraft', 'HarperCollins', 14),
+(11, 'Intro To French', '678-1-60389-025-4', '2.4', 'Beginners book for learning french', 'H. P. Lovecraft', 'Penguin Random House', 7),
+(12, 'Intro To German', '678-1-67389-025-4', '2.3', 'Beginners book for learning german', 'H. P. Lovecraft', 'HarperCollins', 13),
 (17, 'Intro To Science', '748-9856-9999', '1.0', 'Book About Science', 'David Smith', 'Macmillian', 74);
 
 CREATE TABLE `loan` (
@@ -71,7 +74,10 @@ INSERT INTO `loan` (`loan_id`, `loan_user_id`, `loan_book_id`, `loan_started`, `
 (4, 4, 5, '2020-10-14 11:00:00', '2020-10-19 00:00:00', NULL),
 (5, 1, 2, '2020-10-24 18:19:22', '2020-10-28 18:19:22', NULL),
 (6, 1, 4, '2020-10-24 18:19:47', '2020-10-27 18:19:47', NULL),
-(7, 1, 5, '2020-10-24 18:20:03', '2020-10-28 18:20:03', '2020-10-24 18:48:30');
+(7, 1, 5, '2020-10-24 18:20:03', '2020-10-28 18:20:03', '2020-10-24 18:48:30'),
+(8, 13, 17, '2020-11-04 09:55:58', '2020-11-08 09:55:58', '2020-11-04 09:56:49'),
+(9, 13, 12, '2020-11-04 11:10:02', '2020-11-11 11:10:02', NULL),
+(10, 13, 11, '2020-11-04 11:10:41', '2020-11-09 11:10:41', NULL);
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -92,7 +98,10 @@ INSERT INTO `users` (`id`, `type`, `username`, `password`, `email`, `phoneNumber
 (4, 'Member', 'Malo', '1', 'malo@gmail.com', '2589652365', '2020-10-12 16:20:05', 1, 4),
 (5, 'Admin', 'AdminJohn', '1', 'john@gmail.com', '0256985478', '2020-10-12 16:20:05', 1, 5),
 (6, 'Member', 'Sam1', '1', 'sam1@gmail.com', '0589653258', '2020-10-12 16:20:54', 0, 6),
-(13, 'Member', 'David', 'Smith', 'david@gmail.com', '2548965874', '2020-10-22 17:41:27', 1, 18);
+(13, 'Member', 'David', 'Smith', 'david@gmail.com', '2548965874', '2020-10-22 17:41:27', 1, 18),
+(15, 'Member', 'Micheal', 'msmith', 'micheal@gmail.com', '2547896587', '2020-11-04 09:48:36', 1, 20),
+(16, 'Member', 'Mary', 'marysmith', 'mary@gmail.com', '8752658987', '2020-11-04 09:50:18', 1, 21),
+(17, 'Member', 'Anna', 'a123', 'anna@gmail.com', '9875645214', '2020-11-04 09:52:51', 1, 22);
 
 
 ALTER TABLE `address`
@@ -114,16 +123,16 @@ ALTER TABLE `users`
 
 
 ALTER TABLE `address`
-  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 ALTER TABLE `book`
   MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 ALTER TABLE `loan`
-  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 
 ALTER TABLE `loan`
